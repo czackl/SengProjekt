@@ -1,0 +1,36 @@
+# Hangman
+
+import pygame
+from pygame.locals import *
+
+# init
+pygame.init()
+width = 640
+height = 480
+s = pygame.display.set_mode((width, height)) # s for screen
+pygame.display.set_caption("Galgenmaennchen")
+FPS = 30
+
+clock = pygame.time.Clock()
+
+# Define Colors
+white = (255,255,255)
+
+# Define word list for the game
+words = ["software", "projekt", "informatik", "bingen", "semesterferien", "nudelauflauf", "galgenmann", "minispiel"]
+
+# game loop
+running = True
+while running:
+  # event loop
+  for event in pygame.event.get():
+      # exit
+      if event.type==pygame.QUIT:
+          pygame.quit()
+          exit(0)
+
+  s.fill(white)
+
+  # update an tick the clock
+  pygame.display.update()
+  clock.tick(FPS)
