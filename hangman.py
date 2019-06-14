@@ -3,6 +3,8 @@
 import pygame
 from pygame.locals import *
 
+def main():
+    print ("Hello World")
 # init
 pygame.init()
 width = 640
@@ -43,14 +45,14 @@ while running:
 
         # exit
         if event.type==pygame.QUIT:
-
+            running = False
             pygame.quit()
             exit(0)
     # refresh game window
     s.fill(white)
 
     # print character array on screen
-    
+
 
     # update an tick the clock
     pygame.display.update()
