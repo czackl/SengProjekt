@@ -10,13 +10,13 @@ Seng Projekt SoSe2019
 
 
 Infos zum einbinden der Spiele:
-Das Gamemanager Script importiert die Spiele als modul, die einbindung funktioniert bereits. Damit das funktioniert brauchen die Spiele folgenden Aufbau: 
+Das Gamemanager Script importiert die Spiele als modul, die einbindung funktioniert bereits. Damit das funktioniert brauchen die Spiele folgenden Aufbau:
 
 def main():
-  ## Spielcode
+..Spielcode
 
 
-  ## Spielcode Ende
+..Spielcode Ende
 
 if __name__ == "__main__":
   main()
