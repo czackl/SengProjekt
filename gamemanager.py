@@ -1,9 +1,8 @@
 # game manager
 import pygame
-from pygame.locals import *
 
 # import the other games
-import hangman 
+import hangman
 
 #init
 pygame.init()
@@ -27,6 +26,8 @@ while running:
             running = False
             pygame.quit()
             exit(0)
+        if event.type==pygame.KEYUP:
+            hangman.main()
 
     # refresh window
     s.fill(white)
