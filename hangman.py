@@ -54,3 +54,6 @@ def main():
         # update an tick the clock
         pygame.display.update()
         clock.tick(FPS)
+
+if __name__ == "__main__":
+    main()
