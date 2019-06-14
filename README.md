@@ -6,5 +6,5 @@ Seng Projekt SoSe2019
 ##Mögliche Spiele
 1. Bauernspiel
 2. Vier Gewinnt
-3.
-4. 
+3. Hangman
+4.
