@@ -22,3 +22,7 @@ if __name__ == "__main__":
   main()
 
 Der Code sorgt dafür dass sich das spiel als modul einbinden lässt, zu testzwecken kann man das script aber auch alleine aufrufen.
+
+Auf die gleiche Weise kann man auch den gamemanager am Ende des Spiels aufrufen:
+import Gamemanager
+gamemanager.main()

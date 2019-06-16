@@ -1,6 +1,7 @@
 # Hangman
 import pygame
 from pygame.locals import *
+import gamemanager
 
 def main():
     # init
@@ -15,16 +16,18 @@ def main():
 
     # Define Colors
     white = (255,255,255)
-    red = ()
-    blue = (0,0,0)
+    red = (255, 0, 0)
+    blue = (0,0,255)
     black = (0,0,0)
     gray = ()
-    green = ()
+    green = (0, 255, 0)
 
     # Define word list for the game
     words = ["software", "projekt", "informatik", "bingen", "semesterferien", "nudelauflauf", "galgenmann", "minispiel"]
-    word = "" # randomly chosen word for the games
-
+    word = "abc" # randomly chosen word for the games
+    cipherword = []
+    for i in range(len(word)):
+        cipherword.append("_")
 
     # Define Alphabet Array
     alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
@@ -38,8 +41,9 @@ def main():
     for i in range(26):
         colors.append(black)
 
-
+    #######################
     # game loop
+    #######################
     running = True
     while running:
         # event loop
@@ -68,14 +72,40 @@ def main():
             # enter
             if keys[K_RETURN]:
                 # check if key in word
-                print (currentCharacter)
+                character = alphabet[currentCharacter]
+                # check if character in word
+                if character in word:
+                    # character is in word
+                    for c in range (len(word)):
+                        if word[c] == (character):
+                            cipherword[c] = character
+                    # print succes message
 
+                else:
+                    # character is not in word
+                    # print "no succes" message
+                    pass
 
         # refresh game window
         s.fill(white)
 
         # print character array on screen
+        alphabetprint = ""
+        alphabetx = 0
+        alphabetwidth = width /len(alphabet)
+        font_obj = pygame.font.SysFont("Comic Sans MS", 15)
 
+        for i in range (26):
+            text_obj = font_obj.render(alphabet[i], True, colors[i])
+            s.blit(text_obj, (alphabetx,0))
+            alphabetx += alphabetwidth
+
+        # test if player has won or lost
+        if "_" not in cipherword:
+            running = False
+            print ("Won")
+            # back to the menue
+            gamemanager.main()
 
         # update an tick the clock
         pygame.display.update()

@@ -5,36 +5,40 @@ from pygame.locals import *
 # import the other games
 import hangman
 
-#init
-pygame.init()
-width = 640
-height = 480
-s = pygame.display.set_mode((width, height)) # s for screen
-pygame.display.set_caption("Spielmenue")
-FPS = 30
+def main():
+    #init
+    pygame.init()
+    width = 640
+    height = 480
+    s = pygame.display.set_mode((width, height)) # s for screen
+    pygame.display.set_caption("Spielmenue")
+    FPS = 30
 
-# define Colors
-white = (255,255,255)
+    # define Colors
+    white = (255,255,255)
 
-# game loop
-running = True
-while running:
-    # event loop
-    for event in pygame.event.get():
+    # game loop
+    running = True
+    while running:
+        # event loop
+        for event in pygame.event.get():
 
-        # exit
-        if event.type==pygame.QUIT:
-            running = False
-            pygame.quit()
-            exit(0)
-            
-        # keys pressed
-        keys = pygame.key.get_pressed()
-        if keys[K_RIGHT]:
-            hangman.main()
+            # exit
+            if event.type==pygame.QUIT:
+                running = False
+                pygame.quit()
+                exit(0)
 
-    # refresh window
-    s.fill(white)
+            # keys pressed
+            keys = pygame.key.get_pressed()
+            if keys[K_RIGHT]:
+                hangman.main()
 
-    # update and tick the Clock
-    pygame.display.update()
+        # refresh window
+        s.fill(white)
+
+        # update and tick the Clock
+        pygame.display.update()
+
+if __name__ == "__main__":
+    main()
