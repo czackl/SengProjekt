@@ -1,7 +1,8 @@
 # Hangman
-def main():
-    import pygame
+import pygame
+from pygame.locals import *
 
+def main():
     # init
     pygame.init()
     width = 640
@@ -15,12 +16,15 @@ def main():
     # Define Colors
     white = (255,255,255)
     red = ()
+    blue = (0,0,0)
     black = (0,0,0)
     gray = ()
     green = ()
 
     # Define word list for the game
     words = ["software", "projekt", "informatik", "bingen", "semesterferien", "nudelauflauf", "galgenmann", "minispiel"]
+    word = "" # randomly chosen word for the games
+
 
     # Define Alphabet Array
     alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
@@ -34,17 +38,39 @@ def main():
     for i in range(26):
         colors.append(black)
 
+
     # game loop
     running = True
     while running:
         # event loop
         for event in pygame.event.get():
-
             # exit
             if event.type==pygame.QUIT:
                 running = False
                 pygame.quit()
                 exit(0)
+
+            # keys pressed
+            keys = pygame.key.get_pressed()
+            # rigth key
+            if keys[K_RIGHT]:
+                colors[currentCharacter] = black
+                currentCharacter +=1
+                currentCharacter %= 26
+                colors[currentCharacter] = blue
+            # left key
+            if keys[K_LEFT]:
+                colors[currentCharacter] = black
+                currentCharacter -= 1
+                if currentCharacter < 0:
+                    currentCharacter = 25
+                colors[currentCharacter] = blue
+            # enter
+            if keys[K_RETURN]:
+                # check if key in word
+                print (currentCharacter)
+
+
         # refresh game window
         s.fill(white)
 
