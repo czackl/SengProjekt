@@ -37,6 +37,8 @@ def main():
         # refresh window
         s.fill(white)
 
+        # print menu text
+
         # update and tick the Clock
         pygame.display.update()
 
