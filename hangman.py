@@ -4,45 +4,103 @@ from pygame.locals import *
 import gamemanager
 import random
 
-def main():
-    # init
-    pygame.init()
-    width = 640
-    height = 480
-    s = pygame.display.set_mode((width, height)) # s for screen
-    pygame.display.set_caption("Galgenmaennchen")
-    FPS = 30
+# Init stuff
+pygame.init()
+width = 640
+height = 480
+s = pygame.display.set_mode((width, height)) # s for screen
+pygame.display.set_caption("Galgenmaennchen")
+FPS = 30
 
-    clock = pygame.time.Clock()
+clock = pygame.time.Clock()
 
-    # Define Colors
-    white = (255,255,255)
-    red = (255, 0, 0)
-    blue = (0,0,255)
-    black = (0,0,0)
-    gray = ()
-    green = (0, 255, 0)
+# Define Colors
+white = (255,255,255)
+red = (255, 0, 0)
+blue = (0,0,255)
+black = (0,0,0)
+gray = ()
+green = (0, 255, 0)
 
-    # Define word list for the game
-    words = ["software", "projekt", "informatik", "bingen", "semesterferien", "nudelauflauf", "galgenmann", "minispiel", "sengsationell", "photosynthese", "desoxyribonukleinsaeure"]
-    word = words[random.randint(0, len(words))] # randomly chosen word for the games
-    cipherword = []
-    for i in range(len(word)):
-        cipherword.append("_")
+# Word collection
+words = ["software", "projekt", "informatik", "bingen", "semesterferien",
+"nudelauflauf", "galgenmann", "minispiel", "sengsationell", "photosynthese",
+"desoxyribonukleinsaeure", "sommerferien"]
+word = ""
+cipherword = []
 
-    # Define Alphabet Array
-    alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
+# Define Alphabet Array
+alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
+"n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
+currentCharacter = 0
+colors = [] # array for color of the alphabet
 
-    currentCharacter = 0
+# Methods
+def reset_game_variables():
+    # reset the variables for reuse
+    global colors
+    global word
+    global cipherword
 
-    # define color array for alphabet
     # standard color: black, selected: blue
     # used: red
     colors = []
     for i in range(26):
         colors.append(black)
-    colors[i] = blue
+    colors[currentCharacter] = blue
+    # encrypt cipher word
+    word = words[random.randint(0, len(words)-1)] # randomly chosen word for the games
+    cipherword = []
+    for i in range(len(word)):
+        cipherword.append("_")
 
+def key_right():
+    global colors
+    global currentCharacter
+    if colors[currentCharacter] == blue:
+        colors[currentCharacter] = black
+    currentCharacter +=1
+    currentCharacter %= 26
+    # if current character is already used
+    while colors[currentCharacter] == red:
+        currentCharacter += 1
+        currentCharacter %= 26
+    colors[currentCharacter] = blue
+
+def key_left():
+    global colors
+    global currentCharacter
+    if colors[currentCharacter] == blue:
+        colors[currentCharacter] = black
+    currentCharacter -= 1
+    if currentCharacter < 0:
+        currentCharacter = 25
+    while colors[currentCharacter] == blue:
+        currentCharacter -= 1
+        if currentCharacter < 0:
+            currentCharacter = 25
+    colors[currentCharacter] = blue
+
+def enter():
+    # check if key in word
+    character = alphabet[currentCharacter]
+    colors[currentCharacter] = red
+    # check if character in word
+    if character in word:
+        # character is in word
+        for c in range (len(word)):
+            if word[c] == (character):
+                cipherword[c] = character
+        # print succes message
+
+    else:
+        # character is not in word
+        # print "no succes" message
+        pass
+
+def main():
+    pygame.init()
+    reset_game_variables()
     #######################
     # game loop
     #######################
@@ -60,45 +118,15 @@ def main():
             keys = pygame.key.get_pressed()
             # rigth key
             if keys[K_RIGHT]:
-                if colors[currentCharacter] == blue:
-                    colors[currentCharacter] = black
-                currentCharacter +=1
-                currentCharacter %= 26
-                # if current character is already used
-                while colors[currentCharacter] == red:
-                    currentCharacter += 1
-                    currentCharacter %= 26
-                colors[currentCharacter] = blue
+                key_right()
+
             # left key
             if keys[K_LEFT]:
-                if colors[currentCharacter] == blue:
-                    colors[currentCharacter] = black
-                currentCharacter -= 1
-                if currentCharacter < 0:
-                    currentCharacter = 25
-                while colors[currentCharacter] == red:
-                    currentCharacter -= 1
-                    if currentCharacter < 0:
-                        currentCharacter = 25
-                colors[currentCharacter] = blue
+                key_left()
+
             # enter
             if keys[K_RETURN]:
-                # check if key in word
-                character = alphabet[currentCharacter]
-                colors[currentCharacter] = red
-                # check if character in word
-                if character in word:
-                    # character is in word
-                    for c in range (len(word)):
-                        if word[c] == (character):
-                            cipherword[c] = character
-                    # print succes message
-
-                else:
-                    # character is not in word
-                    # print "no succes" message
-                    pass
-
+                enter()
 
         # refresh game window
         s.fill(white)
@@ -114,7 +142,7 @@ def main():
             alphabetx += alphabetwidth
 
         # print cipher word on screen
-        cipherx = 450
+        cipherx = 300
         cipherCharacterSpace = 25
         font_obj = pygame.font.SysFont("Comic Sans MS", 25)
 

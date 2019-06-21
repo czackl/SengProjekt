@@ -5,7 +5,12 @@ from pygame.locals import *
 # import the other games
 import hangman
 
+# define Colors
+white = (255,255,255)
+
+
 def main():
+
     #init
     pygame.init()
     width = 640
@@ -13,9 +18,6 @@ def main():
     s = pygame.display.set_mode((width, height)) # s for screen
     pygame.display.set_caption("Spielmenue")
     FPS = 30
-
-    # define Colors
-    white = (255,255,255)
 
     # game loop
     running = True
@@ -38,6 +40,7 @@ def main():
         s.fill(white)
 
         # print menu text
+
 
         # update and tick the Clock
         pygame.display.update()
