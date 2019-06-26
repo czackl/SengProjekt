@@ -7,6 +7,7 @@ Seng Projekt SoSe2019
 1. Bauernspiel
 2. Vier Gewinnt
 3. Hangman
+4. Snake
 
 
 Infos zum einbinden der Spiele:
