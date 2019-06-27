@@ -24,8 +24,7 @@ green = (0, 255, 0)
 
 # Word collection
 words = ["software", "projekt", "informatik", "bingen", "semesterferien",
-"nudelauflauf", "galgenmann", "minispiel", "sengsationell", "photosynthese",
-"desoxyribonukleinsaeure", "sommerferien"]
+"nudelauflauf", "galgenmann", "minispiel", "sengsationell", "photosynthese", "sommerferien"]
 word = ""
 cipherword = []
 
@@ -35,12 +34,28 @@ alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
 currentCharacter = 0
 colors = [] # array for color of the alphabet
 
+# Load Images
+Img_6 = pygame.image.load("hangman_6.png")
+Img_5 = pygame.image.load("hangman_5.png")
+Img_4 = pygame.image.load("hangman_4.png")
+Img_3 = pygame.image.load("hangman_3.png")
+Img_2 = pygame.image.load("hangman_2.png")
+Img_1 = pygame.image.load("hangman_1.png")
+Img_0 = pygame.image.load("hangman_0.png")
+
+lifes = 6
+
 # Methods
 def reset_game_variables():
     # reset the variables for reuse
     global colors
     global word
     global cipherword
+    global currentCharacter
+    global lifes
+
+    currentCharacter = 0
+    lifes = 6
 
     # standard color: black, selected: blue
     # used: red
@@ -82,6 +97,7 @@ def key_left():
     colors[currentCharacter] = blue
 
 def enter():
+    global lifes
     # check if key in word
     character = alphabet[currentCharacter]
     colors[currentCharacter] = red
@@ -96,7 +112,32 @@ def enter():
     else:
         # character is not in word
         # print "no succes" message
-        pass
+        lifes -= 1
+
+def print_dead_message():
+    #print dead message
+    pygame.time.wait(400)
+    # s.fill(white)
+    font_obj = pygame.font.SysFont("Comic Sans MS", 100)
+    text_obj = font_obj.render("You lost", True, red)
+    s.blit(text_obj, (150, 150))
+    pygame.display.update()
+    pygame.time.wait(1500)
+    # back to the menue
+    gamemanager.main()
+
+def print_won_message():
+    #print won message
+    pygame.time.wait(400)
+    # s.fill(white)
+    font_obj = pygame.font.SysFont("Comic Sans MS", 100)
+    text_obj = font_obj.render("You Won", True, red)
+    s.blit(text_obj, (150, 150))
+    pygame.display.update()
+    pygame.time.wait(1500)
+    # back to the menue
+    gamemanager.main()
+
 
 def main():
     pygame.init()
@@ -142,29 +183,42 @@ def main():
             alphabetx += alphabetwidth
 
         # print cipher word on screen
-        cipherx = 300
+        cipherxmax = width- 40
         cipherCharacterSpace = 25
         font_obj = pygame.font.SysFont("Comic Sans MS", 25)
 
-        for i in range (len(cipherword)):
+        for i in range (len(cipherword)-1, -1, -1):
             text_obj = font_obj.render(cipherword[i], True, black)
-            s.blit(text_obj, (cipherx, 200))
-            cipherx += cipherCharacterSpace
+            s.blit(text_obj, (cipherxmax, 200))
+            cipherxmax -= cipherCharacterSpace
+
+        # print hangman image on screen; image size: 170, 220, start coordinates 20,100
+        # pygame.draw.rect(s, blue, (20,100, 170,220))
+        img_x = 20
+        img_y = 100
+        if lifes == 6:
+            s.blit(Img_6, (img_x,img_y))
+        elif lifes == 5:
+            s.blit(Img_5, (img_x,img_y))
+        elif lifes == 4:
+            s.blit(Img_4, (img_x,img_y))
+        elif lifes == 3:
+            s.blit(Img_3, (img_x,img_y))
+        elif lifes == 2:
+            s.blit(Img_2, (img_x,img_y))
+        elif lifes == 1:
+            s.blit(Img_1, (img_x,img_y))
+        elif lifes == 0:
+            s.blit(Img_0, (img_x,img_y))
+            print_dead_message()
+        else:
+            s.blit(Img_0, (img_x,img_y))
+            print_dead_message()
 
         # test if player has won or lost
         if "_" not in cipherword:
             running = False
-
-            #print won message
-            pygame.time.wait(300)
-            s.fill(white)
-            font_obj = pygame.font.SysFont("Comic Sans MS", 100)
-            text_obj = font_obj.render("You Won", True, red)
-            s.blit(text_obj, (150, 150))
-            pygame.display.update()
-            pygame.time.wait(1000)
-            # back to the menue
-            gamemanager.main()
+            print_won_message()
 
         # update an tick the clock
         pygame.display.update()
