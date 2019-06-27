@@ -1,4 +1,4 @@
-import pygame, random
+import pygame, random, gamemanager
 
 pygame.init()
 
@@ -85,6 +85,10 @@ def rollDice():
 
     return diceNum
 
+def reset_diplay():
+    screen = pygame.display.set_mode(sizeScreen)
+    pygame.display.set_caption('Snakes & Ladders')
+
 xStart = 30
 yStart = 380
 xAlt = xStart
@@ -136,6 +140,8 @@ player2 = (xStart, yStart)
 def gameLoop():
     global move, turn1, player1, player2
 
+    reset_diplay()
+
     running = 1
 
     while running:
@@ -181,6 +187,7 @@ def gameLoop():
                 if event.key == pygame.K_ESCAPE:
                     quitGame()
 
-gameLoop()
-pygame.quit()
-quit()
+if __name__ =="__main__":
+    gameLoop()
+# pygame.quit()
+# quit()
