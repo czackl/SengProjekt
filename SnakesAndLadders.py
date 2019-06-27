@@ -15,6 +15,10 @@ brightRed = 255,0,0
 brightGreen = 0,255,0
 
 srad = 15
+diceNum = 0
+
+move = False
+turn1 = False
 
 screen = pygame.display.set_mode(sizeScreen)
 pygame.display.set_caption('Snakes & Ladders')
@@ -24,6 +28,7 @@ bg = pygame.image.load("bg.jpg")
 bg = pygame.transform.scale(bg,sizePitch)
 
 def quitGame():
+    #Ein QUIT-Event wird in Pygames Event-Warteschlange gepostet.
     pygame.event.post(pygame.event.Event(pygame.QUIT))
 
 def background():
@@ -33,10 +38,25 @@ def text_objects(text, font):
     textSurface = font.render(text, True, black)
     return textSurface, textSurface.get_rect()
 
+player1Text = "Player1"
+player2Text = "Player2"
+
+def playerText(pT):
+    playerText = pygame.font.Font('freesansbold.ttf',30)
+    textSurf, textRect = text_objects(pT, playerText)
+    textRect.center = ((700),(150))
+    screen.blit(textSurf, textRect)
+
+def turnText():
+    turnText = pygame.font.Font('freesansbold.ttf',30)
+    textSurf, textRect = text_objects("It´s your turn", turnText)
+    textRect.center = ((700),(200))
+    screen.blit(textSurf, textRect)
+
 def button(text,x,y,w,h,mouseOn,mouseOff,action=None):
     mouse = pygame.mouse.get_pos()
     click = pygame.mouse.get_pressed()
-    #print(click)
+
     if x+w > mouse[0] > x and y+h > mouse[1] > y:
         pygame.draw.rect(screen, mouseOn,(x,y,w,h))
 
@@ -50,65 +70,71 @@ def button(text,x,y,w,h,mouseOn,mouseOff,action=None):
     textRect.center = ( (x+(w/2)), (y+(h/2)) )
     screen.blit(textSurf, textRect)
 
-def turnText():
-    turnText = pygame.font.Font('freesansbold.ttf',30)
-    textSurf, textRect = text_objects("It´s your turn", turnText)
-    textRect.center = ((700),(200))
-    screen.blit(textSurf, textRect)
-
 def rollDice():
-    global diceNum
+    global diceNum, turn1, move
 
     diceNum = random.randint(1,6)
-    #print(diceNum)
 
-    diceText = pygame.font.Font("freesansbold.ttf",24)
-    textSurf, textRect = text_objects(str(diceNum), diceText)
-    textRect.center = ( (700), (325) )
-    screen.blit(textSurf, textRect)
+    move = True
 
-    #movePlayer()
+    if turn1:
+        turn1 = False
+    else:
+        turn1 = True
+    pygame.time.wait(1000)
+
+    return diceNum
 
 xStart = 30
 yStart = 380
-xNeu = 0
 xAlt = xStart
+yAlt = yStart
+xNeu = 0
+yNeu = 0
 xMax = 570
 xMin = 30
 xUe = 0
-yNeu = 0
-yAlt = yStart
-
-player1Position = (xStart, yStart)
-player2Position = (xStart, yStart)
+player1Position = (xAlt, yAlt)
+player2Position = (xAlt, yAlt)
 
 def movePlayer(playerPosition):
-    global xNeu, yNeu, xUe, xAlt, yAlt
-    if yAlt == 380 or yAlt == 300 or yAlt == 220 or yAlt == 140 or yAlt == 60:
-        xNeu = xAlt + (diceNum * 60)
-        if xNeu > xMax:
-            yNeu = yStart - 40
-            xUe = xNeu - xMax
-            xNeu = xMax - xUe
-        xAlt = xNeu
-        xUe = 0
-        playerPosition = (xNeu, yNeu)
+    global diceNum, xStart, yStart, xAlt, yAlt, xNeu, yNeu, xMax, xMin, xUe
 
-        pygame.draw.circle(screen, black, playerPosition, srad, 0)
+    if move:
+        if(yAlt % 80 == 60):
+            xNeu = xAlt + (diceNum * 60)
+            yNeu = yAlt
+            if xNeu > xMax:
+                yNeu = yAlt - 40
+                xUe = xNeu - xMax
+                xNeu = xMax - (xUe - 60)
 
-
-    else:
-        xNeu = xAlt - (diceNum * 60)
+                xAlt = xNeu
+                yAlt = yNeu
+                xUe = 0
+                playerPosition = (xNeu, yNeu)
+        else:
+            xNeu = xAlt - (diceNum * 60)
+            yNeu = yAlt
         if xNeu < xMin:
             yNeu = yAlt -40
             xNeu = xNeu * (-1)
-        xAlt = xNeu
-        xUe = 0
-        playerPosition = (xNeu, yNeu)
 
-        pygame.draw.circle(screen, black, playerPosition, srad, 0)
+        xAlt = xNeu
+        yAlt = yNeu
+        xUe = 0
+    playerPosition = (xAlt, yAlt)
+
+    print(diceNum)
+    print(playerPosition)
+
+    return playerPosition
+
+player1 = (xStart, yStart)
+player2 = (xStart, yStart)
 
 def gameLoop():
+    global move, turn1, player1, player2
 
     running = 1
 
@@ -120,16 +146,31 @@ def gameLoop():
 
         background()
 
-        #buttons()
         button("DICE!",650,250,100,50,brightGreen,green,rollDice)
         button("Quit",760,380,40,20,brightRed,red,quitGame)
 
         turnText()
 
-        pygame.display.flip()
+        if diceNum != 0:
+            diceText = pygame.font.Font("freesansbold.ttf",24)
+            textSurf, textRect = text_objects(str(diceNum), diceText)
+            textRect.center = ( (700), (325) )
+            screen.blit(textSurf, textRect)
 
-        """pygame.draw.circle(screen, black, player1Position, srad, 0)
-        pygame.draw.circle(screen, magenta, player2Position, srad, 0)"""
+        if turn1:
+            player1 = movePlayer(player1Position)
+            playerText(player2Text)
+
+        else:
+            player2 = movePlayer(player2Position)
+            playerText(player1Text)
+
+        pygame.draw.circle(screen, black, player1, srad, 0)
+        pygame.draw.circle(screen, magenta, player2, srad, 0)
+
+        move = False
+
+        pygame.display.flip()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -137,19 +178,8 @@ def gameLoop():
                 pygame.quit()
                 quit()
             if event.type == pygame.KEYDOWN:
-                # Wenn Escape gedrückt wird, posten wir ein QUIT-Event in Pygames Event-Warteschlange.
                 if event.key == pygame.K_ESCAPE:
-                    pygame.event.post(pygame.event.Event(pygame.QUIT))
-                if event.key == pygame.K_RIGHT:
-                    rollDice()
-                    movePlayer(player1Position)
-                    pygame.draw.circle(screen, black, player1Position, srad, 0)
-                if event.key == pygame.K_LEFT:
-                    rollDice()
-                    movePlayer(player2Position)
-                    pygame.draw.circle(screen, black, player1Position, srad, 0)
-
-        pygame.display.flip()
+                    quitGame()
 
 gameLoop()
 pygame.quit()
