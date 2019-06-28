@@ -6,19 +6,22 @@ sizePitch = width, height = 600, 400
 sizeScreen = width, height = 800, 400
 #Feld "Steuerung" von x1=600 bis x2=800 height = 400
 
+#Colors:
 black = 0,0,0
 magenta = 255,0,255
-white = 255,255,255
+oliveGreen = 110,139,61
 red = 200,0,0
 green = 0,200,0
+blue = 0,0,200
 brightRed = 255,0,0
 brightGreen = 0,255,0
+brightBlue = 0,0,255
 
 srad = 15
 diceNum = 0
 
 move = False
-turn1 = False
+turn = False
 
 screen = pygame.display.set_mode(sizeScreen)
 pygame.display.set_caption('Snakes & Ladders')
@@ -33,6 +36,23 @@ def quitGame():
 
 def background():
     screen.blit(bg,(0,0))
+
+def resetGame():
+    global diceNum, xStart, yStart, xAlt, yAlt, xNeu, yNeu, xMax, xMin, xUe, player1, player2, move, turn
+
+    xStart = 30
+    yStart = 380
+    xAlt = xStart
+    yAlt = yStart
+    xNeu = 0
+    yNeu = 0
+    xMax = 570
+    xMin = 30
+    xUe = 0
+    player1 = (xStart, yStart)
+    player2 = (xStart, yStart)
+    move = False
+    turn = False
 
 def text_objects(text, font):
     textSurface = font.render(text, True, black)
@@ -71,34 +91,35 @@ def button(text,x,y,w,h,mouseOn,mouseOff,action=None):
     screen.blit(textSurf, textRect)
 
 def rollDice():
-    global diceNum, turn1, move
+    global diceNum, turn, move
 
     diceNum = random.randint(1,6)
 
     move = True
 
-    if turn1:
-        turn1 = False
+    if turn:
+        turn = False
     else:
-        turn1 = True
+        turn = True
     pygame.time.wait(1000)
 
     return diceNum
 
 xStart = 30
 yStart = 380
-xAlt = xStart
-yAlt = yStart
 xNeu = 0
 yNeu = 0
 xMax = 570
 xMin = 30
 xUe = 0
-player1Position = (xAlt, yAlt)
-player2Position = (xAlt, yAlt)
+player1Position = (xStart, yStart)
+player2Position = (xStart, yStart)
 
 def movePlayer(playerPosition):
-    global diceNum, xStart, yStart, xAlt, yAlt, xNeu, yNeu, xMax, xMin, xUe
+    global diceNum, xStart, yStart, xNeu, yNeu, xMax, xMin, xUe
+
+    xAlt = playerPosition[0]
+    yAlt = playerPosition[1]
 
     if move:
         if(yAlt % 80 == 60):
@@ -130,11 +151,33 @@ def movePlayer(playerPosition):
 
     return playerPosition
 
-player1 = (xStart, yStart)
-player2 = (xStart, yStart)
+#player1Position = (xStart, yStart)
+#player2Position = (xStart, yStart)
+
+def snakes(playerPosition):
+    #(56 : 1) (83 : 45) (85 : 59) (90 : 48)
+    #(92 : 25) (97 : 87) (99 : 63)
+    switcher1 = {
+        (450 , 380): (210 , 380),
+        (150 , 340): (30, 380),
+        (270, 300): (570, 380),
+        (90, 260): (270, 380),
+        (570, 180): (330, 380),
+        (390, 180): (270, 260),
+        (270, 180): (30, 380),
+        (30, 180): (150, 300),
+        (330, 100): (450, 300),
+        ()
+    }
+    return switcher1.get(playerPosition, playerPosition)
+
+def ladders(playerPosition):
+    #(3 : 20) (6 : 14) (11 : 28) (15 : 34) (17 : 74) (22 : 37)
+    #(38 : 59) (49 : 67) (57 : 76) (61 : 78) (73 : 86) (81 : 98) (88 : 91)
+    return null
 
 def gameLoop():
-    global move, turn1, player1, player2
+    global move, turn, player1Position, player2Position
 
     running = 1
 
@@ -142,12 +185,13 @@ def gameLoop():
 
         clock.tick(15)
 
-        screen.fill(white)
+        screen.fill(oliveGreen)
 
         background()
 
         button("DICE!",650,250,100,50,brightGreen,green,rollDice)
-        button("Quit",760,380,40,20,brightRed,red,quitGame)
+        button("Quit",740,370,60,30,brightRed,red,quitGame)
+        button("Reset",600,370,60,30,brightBlue,blue,resetGame)
 
         turnText()
 
@@ -157,16 +201,18 @@ def gameLoop():
             textRect.center = ( (700), (325) )
             screen.blit(textSurf, textRect)
 
-        if turn1:
-            player1 = movePlayer(player1Position)
+        if turn:
+            player1Position = movePlayer(player1Position)
+            player1Position = snakes(player1Position)
             playerText(player2Text)
 
         else:
-            player2 = movePlayer(player2Position)
+            player2Position = movePlayer(player2Position)
+            player2Position = snakes(player2Position)
             playerText(player1Text)
 
-        pygame.draw.circle(screen, black, player1, srad, 0)
-        pygame.draw.circle(screen, magenta, player2, srad, 0)
+        pygame.draw.circle(screen, black, player1Position, srad, 0)
+        pygame.draw.circle(screen, magenta, player2Position, srad, 0)
 
         move = False
 
