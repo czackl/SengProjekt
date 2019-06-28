@@ -4,6 +4,7 @@ from pygame.locals import *
 
 # import the other games
 import hangman
+import SnakesAndLadders
 
 # define Colors
 white = (255,255,255)
@@ -35,6 +36,8 @@ def main():
             keys = pygame.key.get_pressed()
             if keys[K_RIGHT]:
                 hangman.main()
+            if keys[K_LEFT]:
+                SnakesAndLadders.gameLoop()
 
         # refresh window
         s.fill(white)
