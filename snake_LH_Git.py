@@ -29,7 +29,7 @@ class Kaestchen(pygame.sprite.Sprite):
         elif self.rect.y + QUADRAT_S_L > FELD_B:
             self.rect.y = 0
         elif self.rect.y < 0:
-            self.rect.y = FELD_H + QUADRAT_S_L - 5
+            self.rect.y = FELD_H - QUADRAT_S_L - 5
         else:
             self.rect.x += self.change_x
             self.rect.y += self.change_y
