@@ -8,6 +8,8 @@ import SnakesAndLadders
 
 # define Colors
 white = (255,255,255)
+blue = (0, 0, 255)
+red = (255, 0, 0)
 
 
 def main():
@@ -16,7 +18,7 @@ def main():
     pygame.init()
     width = 640
     height = 480
-    s = pygame.display.set_mode((width, height)) # s for screen
+    screen = pygame.display.set_mode((width, height)) # s for screen
     pygame.display.set_caption("Spielmenue")
     FPS = 30
 
@@ -40,11 +42,11 @@ def main():
                 SnakesAndLadders.gameLoop()
 
         # refresh window
-        s.fill(white)
+        screen.fill(white)
 
         # print menu text
-
-
+        SnakesAndLadders.button("Hangman", width/2, 50, 100, 50, red, blue, hangman.main)
+        SnakesAndLadders.button("Snakes and Ladders", width/2, 100, 200, 50, red, blue, SnakesAndLadders.gameLoop)
         # update and tick the Clock
         pygame.display.update()
 

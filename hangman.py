@@ -5,12 +5,12 @@ import gamemanager
 import random
 
 # Init stuff
-pygame.init()
 width = 640
 height = 480
+pygame.init()
+FPS = 30
 s = pygame.display.set_mode((width, height)) # s for screen
 pygame.display.set_caption("Galgenmaennchen")
-FPS = 30
 
 clock = pygame.time.Clock()
 
@@ -23,14 +23,14 @@ gray = ()
 green = (0, 255, 0)
 
 # Word collection
-words = ["software", "projekt", "informatik", "bingen", "semesterferien",
-"nudelauflauf", "galgenmann", "minispiel", "sengsationell", "photosynthese", "sommerferien"]
+words = ["SOFTWARE", "PROJEKT", "INFORMATIK", "BINGEN", "SEMESTERFERIEN",
+"NUDELAUFLAUF", "GALGENMANN", "MINISPIEL", "BIOINFORMATIK", "SOMMERFERIEN"]
 word = ""
 cipherword = []
 
 # Define Alphabet Array
-alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
-"n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
+alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
+"N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
 currentCharacter = 0
 colors = [] # array for color of the alphabet
 
@@ -53,6 +53,9 @@ def reset_game_variables():
     global cipherword
     global currentCharacter
     global lifes
+
+    s = pygame.display.set_mode((width, height)) # s for screen
+    pygame.display.set_caption("Galgenmaennchen")
 
     currentCharacter = 0
     lifes = 6
@@ -90,7 +93,7 @@ def key_left():
     currentCharacter -= 1
     if currentCharacter < 0:
         currentCharacter = 25
-    while colors[currentCharacter] == blue:
+    while colors[currentCharacter] == red:
         currentCharacter -= 1
         if currentCharacter < 0:
             currentCharacter = 25
@@ -138,6 +141,23 @@ def print_won_message():
     # back to the menue
     gamemanager.main()
 
+def button(text,x,y,w,h,mouseOn,mouseOff,action=None):
+    mouse = pygame.mouse.get_pos()
+    click = pygame.mouse.get_pressed()
+
+    if x+w > mouse[0] > x and y+h > mouse[1] > y:
+        pygame.draw.rect(s, mouseOn,(x,y,w,h))
+
+        if click[0] == 1 and action != None:
+            action()
+    else:
+        pygame.draw.rect(s, mouseOff,(x,y,w,h))
+
+    buttonText = pygame.font.SysFont("comicsansms",20)
+    textSurf = buttonText.render(text, 20, black)
+    textRect = textSurf.get_rect()
+    textRect.center = ( (x+(w/2)), (y+(h/2)) )
+    s.blit(textSurf, textRect)
 
 def main():
     pygame.init()
@@ -153,7 +173,7 @@ def main():
             if event.type==pygame.QUIT:
                 running = False
                 pygame.quit()
-                exit(0)
+                quit()
 
             # keys pressed
             keys = pygame.key.get_pressed()
@@ -214,6 +234,10 @@ def main():
         else:
             s.blit(Img_0, (img_x,img_y))
             print_dead_message()
+
+        # Print Buttons
+        button ("Back", 0, 0, 50, 30, red, blue, gamemanager.main)
+        button ("Reset", 70, 0, 70, 30, red, blue, reset_game_variables)
 
         # test if player has won or lost
         if "_" not in cipherword:
