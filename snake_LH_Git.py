@@ -58,6 +58,7 @@ allKaestchen.add(apfel)
 
 stop = False
 
+
 while not stop:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
