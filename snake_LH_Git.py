@@ -22,11 +22,11 @@ class Kaestchen(pygame.sprite.Sprite):
         self.change_y = 0
 
     def update(self):
-        if self.rect.x + QUADRAT_S_L >  FELD_B:
+        if self.rect.x + QUADRAT_S_L > FELD_B:
             self.rect.x = 0
         elif self.rect.x < 0:
             self.rect.x = FELD_B - QUADRAT_S_L - 5
-        elif self.rect.y + QUADRAT_S_L >  FELD_B:
+        elif self.rect.y + QUADRAT_S_L > FELD_B:
             self.rect.y = 0
         elif self.rect.y < 0:
             self.rect.y = FELD_H + QUADRAT_S_L - 5
@@ -40,8 +40,6 @@ class Kaestchen(pygame.sprite.Sprite):
         self.change_y = y
 
 pygame.init()
-feld = pygame.display.set_mode ([FELD_B, FELD_H])
-clock = pygame.time.Clock()
 
 snake = []
 allKaestchen = pygame.sprite.Group()
@@ -54,6 +52,8 @@ snake.append(kaestchen)
 allKaestchen.add(kaestchen)
 
 
+feld = pygame.display.set_mode ([FELD_B, FELD_H])
+clock = pygame.time.Clock()
 
 
 stop = False
@@ -62,24 +62,24 @@ while not stop:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             stop = True
-        elif event.type == KEYDOWN:
-            if event.key == pygame.K_UP
-                snake[0].changespeed(0, 25)
-            elif event.key == pygame.K_DOWN
-                snake[0].changespeed(0, -25)
-            elif event.key == pygame.K_LEFT
-                snake[0].changespeed(-25, 0)
-            elif event.key == pygame.K_RIGHT
-                snake[0].changespeed(25, 0)
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP:
+                snake[0].changeSpeed(0, -25)
+            elif event.key == pygame.K_DOWN:
+                snake[0].changeSpeed(0, 25)
+            elif event.key == pygame.K_LEFT:
+                snake[0].changeSpeed(-25, 0)
+            elif event.key == pygame.K_RIGHT:
+                snake[0].changeSpeed(25, 0)
 
 
 
 
     feld.fill(BG)
+    snake[0].update()
     allKaestchen.draw(feld)
 
-
     pygame.display.flip()
-    clock.tick(25)
+    clock.tick(10)
 
 pygame.quit()
