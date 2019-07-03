@@ -2,16 +2,19 @@
 import pygame
 import random
 
-K = (0, 0, 0)
-BG = (230, 255, 230)
-SNAKE = pygame.image.load("schlange.png")
-SNAKE = pygame.transform.scale(SNAKE, QUADRAT_S_L, QUADRAT_S_L)
-APPLE = pygame.image.load("apfel.png")
-APPLE = pygame.transform.scale(APPLE, QUADRAT_S_L, QUADRAT_S_L)
 
 FELD_H = 600
 FELD_B = 600
 QUADRAT_S_L = 20
+
+scale = width, height = 20, 20
+
+BG = (230, 255, 230)
+SNAKE = pygame.image.load("schlange.png")
+SNAKE = pygame.transform.scale(SNAKE, scale)
+APPLE = pygame.image.load("apfel.png")
+APPLE = pygame.transform.scale(APPLE, scale)
+
 
 class Kaestchen(pygame.sprite.Sprite):
     def __init__(self, color, width, height):
@@ -48,14 +51,14 @@ def main():
     snake = []
     allKaestchen = pygame.sprite.Group()
 
-    kaestchen = Kaestchen(K, QUADRAT_S_L, QUADRAT_S_L)
+    kaestchen = Kaestchen(SNAKE, scale)
     kaestchen.rect.x = random.randrange(int(FELD_B/25))*25
     kaestchen.rect.y = random.randrange(int(FELD_H/25))*25
 
     snake.append(kaestchen)
     allKaestchen.add(kaestchen)
 
-    apfel = Kaestchen(APPLE, QUADRAT_S_L, QUADRAT_S_L)
+    apfel = Kaestchen(APPLE, scale)
     apfel.rect.x = random.randrange(int(FELD_B/25))*25
     apfel.rect.y = random.randrange(int(FELD_H/25))*25
     allKaestchen.add(apfel)
@@ -88,7 +91,7 @@ def main():
     newKaestchen = None
 
     if hit_Kaestchen:
-        newKaestchen = Kaestchen(K, QUADRAT_S_L, QUADRAT_S_L)
+        newKaestchen = Kaestchen(SNAKE, scale)
         newKaestchen.rect.x = snake[-1].rect.x
         newKaestchen.rect.y = snake[-1].rect.y
 
