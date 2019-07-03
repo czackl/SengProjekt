@@ -1,4 +1,7 @@
 # Hangman
+"""
+Script for the Hangman Game
+"""
 import pygame
 from pygame.locals import *
 import gamemanager
@@ -15,12 +18,12 @@ pygame.display.set_caption("Galgenmaennchen")
 clock = pygame.time.Clock()
 
 # Define Colors
-white = (255,255,255)
-red = (255, 0, 0)
-blue = (0,0,255)
-black = (0,0,0)
-gray = ()
-green = (0, 255, 0)
+white = (38, 37, 35)
+red = (242, 109, 61)
+blue = (166, 146, 129)
+black = (242, 230, 216)
+gray = (166, 98, 38)
+green = (204, 29, 23)
 
 # Word collection
 words = ["SOFTWARE", "PROJEKT", "INFORMATIK", "BINGEN", "SEMESTERFERIEN",
@@ -47,6 +50,9 @@ lifes = 6
 
 # Methods
 def reset_game_variables():
+    """
+    Method used for resetting all Game Variables before starting a new game.
+    """
     # reset the variables for reuse
     global colors
     global word
@@ -65,7 +71,7 @@ def reset_game_variables():
     colors = []
     for i in range(26):
         colors.append(black)
-    colors[currentCharacter] = blue
+    colors[currentCharacter] = green
     # encrypt cipher word
     word = words[random.randint(0, len(words)-1)] # randomly chosen word for the games
     cipherword = []
@@ -73,9 +79,14 @@ def reset_game_variables():
         cipherword.append("_")
 
 def key_right():
+    """
+    method used for calculating the picked character from the character list
+    red (already used) characters are skipped
+    when reaching the rigth edge the "curser" reenters on the left side
+    """
     global colors
     global currentCharacter
-    if colors[currentCharacter] == blue:
+    if colors[currentCharacter] == green:
         colors[currentCharacter] = black
     currentCharacter +=1
     currentCharacter %= 26
@@ -83,12 +94,16 @@ def key_right():
     while colors[currentCharacter] == red:
         currentCharacter += 1
         currentCharacter %= 26
-    colors[currentCharacter] = blue
+    colors[currentCharacter] = green
 
 def key_left():
+    """
+    Calculting the chosen character when the left key is pressed
+    already used characters are skipped
+    """
     global colors
     global currentCharacter
-    if colors[currentCharacter] == blue:
+    if colors[currentCharacter] == green:
         colors[currentCharacter] = black
     currentCharacter -= 1
     if currentCharacter < 0:
@@ -97,9 +112,12 @@ def key_left():
         currentCharacter -= 1
         if currentCharacter < 0:
             currentCharacter = 25
-    colors[currentCharacter] = blue
+    colors[currentCharacter] = green
 
 def enter():
+    """
+    Calculting if the chosen character is in the cipher word when the user presses enter
+    """
     global lifes
     # check if key in word
     character = alphabet[currentCharacter]
@@ -118,9 +136,11 @@ def enter():
         lifes -= 1
 
 def print_dead_message():
+    """
+    When the user has no more lifes a dead message is printed
+    """
     #print dead message
     pygame.time.wait(400)
-    # s.fill(white)
     font_obj = pygame.font.SysFont("Comic Sans MS", 100)
     text_obj = font_obj.render("You lost", True, red)
     s.blit(text_obj, (150, 150))
@@ -130,9 +150,11 @@ def print_dead_message():
     gamemanager.main()
 
 def print_won_message():
+    """
+    When the user guessed all characters an is not already dead a won message is printed
+    """
     #print won message
     pygame.time.wait(400)
-    # s.fill(white)
     font_obj = pygame.font.SysFont("Comic Sans MS", 100)
     text_obj = font_obj.render("You Won", True, red)
     s.blit(text_obj, (150, 150))
@@ -142,6 +164,18 @@ def print_won_message():
     gamemanager.main()
 
 def button(text,x,y,w,h,mouseOn,mouseOff,action=None):
+    """
+    Method implementing a Button which can be arranged in an pygame window
+    Usage: button (text, x, y, w, h, mouseOn, mouseOff, action)
+    text: text to be displayed by the button
+    x: top left x coordinate
+    y: top left y coordinate
+    w: width of the button
+    h: heigth of the button
+    mouseOn: color when hovering the button with the cursor
+    mouseOff: standart button colors
+    action: method called when pressed, method name without parenthesis
+    """
     mouse = pygame.mouse.get_pos()
     click = pygame.mouse.get_pressed()
 
@@ -154,12 +188,16 @@ def button(text,x,y,w,h,mouseOn,mouseOff,action=None):
         pygame.draw.rect(s, mouseOff,(x,y,w,h))
 
     buttonText = pygame.font.SysFont("comicsansms",20)
-    textSurf = buttonText.render(text, 20, black)
+    textSurf = buttonText.render(text, 20, white)
     textRect = textSurf.get_rect()
     textRect.center = ( (x+(w/2)), (y+(h/2)) )
     s.blit(textSurf, textRect)
 
 def main():
+    """
+    Main method for calling the games
+    includes the setup (reset Variables) and the game loop
+    """
     pygame.init()
     reset_game_variables()
     #######################
@@ -214,8 +252,8 @@ def main():
 
         # print hangman image on screen; image size: 170, 220, start coordinates 20,100
         # pygame.draw.rect(s, blue, (20,100, 170,220))
-        img_x = 20
-        img_y = 100
+        img_x = 30
+        img_y = 130
         if lifes == 6:
             s.blit(Img_6, (img_x,img_y))
         elif lifes == 5:
@@ -235,9 +273,13 @@ def main():
             s.blit(Img_0, (img_x,img_y))
             print_dead_message()
 
+        # Print menu bar
+        pygame.draw.rect(s, blue, (0,0, width, 30))
+
         # Print Buttons
         button ("Back", 0, 0, 50, 30, red, blue, gamemanager.main)
-        button ("Reset", 70, 0, 70, 30, red, blue, reset_game_variables)
+        button ("Reset", 55, 0, 70, 30, red, blue, reset_game_variables)
+        button ("Left: <    Right: >    Choose: Enter", 380, 0, 200, 30, blue, blue)
 
         # test if player has won or lost
         if "_" not in cipherword:
