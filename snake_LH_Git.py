@@ -4,8 +4,10 @@ import random
 
 K = (0, 0, 0)
 BG = (230, 255, 230)
-SNAKE = (127, 96, 51)
-APPLE = (255, 40, 0)
+SNAKE = pygame.image.load("schlange.png")
+SNAKE = pygame.transform.scale(SNAKE, QUADRAT_S_L, QUADRAT_S_L)
+APPLE = pygame.image.load("apfel.png")
+APPLE = pygame.transform.scale(APPLE, QUADRAT_S_L, QUADRAT_S_L)
 
 FELD_H = 600
 FELD_B = 600
