@@ -74,11 +74,11 @@ def textObjects(text, font, color):
 def win(pT, color):
     pygame.time.wait(400)
     screen.fill(oliveGreen)
-    playerWinText = pygame.font.Font('freesansbold.ttf',50)
+    playerWinText = pygame.font.SysFont("comicsansms",50)
     textSurf, textRect = textObjects(pT, playerWinText, color)
     textRect.center = ((400),(150))
     screen.blit(textSurf, textRect)
-    winText = pygame.font.Font('freesansbold.ttf',50)
+    winText = pygame.font.SysFont("comicsansms",50)
     textSurf, textRect = textObjects("you won", winText, color)
     textRect.center = ((400),(250))
     screen.blit(textSurf, textRect)
@@ -88,25 +88,25 @@ def win(pT, color):
     gamemanager.main()
 
 def playerText(pT, color):
-    playerText = pygame.font.Font('freesansbold.ttf',30)
+    playerText = pygame.font.SysFont("comicsansms",30)
     textSurf, textRect = textObjects(pT, playerText, color)
     textRect.center = ((700),(150))
     screen.blit(textSurf, textRect)
 
 def turnText():
-    turnText = pygame.font.Font('freesansbold.ttf',30)
+    turnText = pygame.font.SysFont("comicsansms",30)
     textSurf, textRect = textObjects("it´s your turn", turnText, black)
     textRect.center = ((700),(200))
     screen.blit(textSurf, textRect)
 
 def biteText():
-    biteText = pygame.font.Font('freesansbold.ttf',22)
+    biteText = pygame.font.SysFont("comicsansms",22)
     textSurf, textRect = textObjects("A snake bites you!", biteText, brightRed)
     textRect.center = ((700),(80))
     screen.blit(textSurf, textRect)
 
 def ladderText():
-    ladderText = pygame.font.Font('freesansbold.ttf',22)
+    ladderText = pygame.font.SysFont("comicsansms",22)
     textSurf, textRect = textObjects("There´s a ladder!", ladderText, brightRed)
     textRect.center = ((700),(100))
     screen.blit(textSurf, textRect)
@@ -264,7 +264,7 @@ def gameLoop():
         turnText()
 
         if diceNum != 0:
-            diceText = pygame.font.Font("freesansbold.ttf",24)
+            diceText = pygame.font.SysFont("comicsansms",24)
             textSurf, textRect = textObjects(str(diceNum), diceText, black)
             textRect.center = ( (700), (325) )
             screen.blit(textSurf, textRect)

@@ -15,6 +15,8 @@ red = (130, 176, 217)
 # Load game preview Images
 Img_hangman = pygame.image.load("hangman_icon.png")
 Img_hangman = pygame.transform.scale(Img_hangman, (90, 130)) # transform to useful size
+Img_sal = pygame.image.load("bg.jpg")
+Img_sal = pygame.transform.scale(Img_sal, (200, 130))
 
 def main():
 
@@ -55,6 +57,7 @@ def main():
 
         # print game preview Images
         screen.blit (Img_hangman, (45, 150))
+        screen.blit (Img_sal, (150,150))
 
         # update and tick the Clock
         pygame.display.update()
