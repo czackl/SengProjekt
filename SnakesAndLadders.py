@@ -1,14 +1,17 @@
+#import moduls, gamemanager
 import pygame, random, gamemanager
 
+#init pygame
 pygame.init()
 
+#define pitch, screen size
 sizePitch = width, height = 600, 400
 sizeScreen = width, height = 800, 400
-#Feld "Steuerung" von x1=600 bis x2=800 height = 400
 
-#Colors:
+#define colors in rgb-code
 black = 0,0,0
-magenta = 255,0,255
+lawnGreen = 124,252,0
+marineBlue = 0,0,128
 oliveGreen = 110,139,61
 red = 200,0,0
 green = 0,200,0
@@ -17,14 +20,17 @@ brightRed = 255,0,0
 brightGreen = 0,255,0
 brightBlue = 0,0,255
 
+#define token radius
 srad = 15
 diceNum = 0
 
+#define booleans
 move = False
 turn = False
 snake = False
 ladder = False
 
+#define player text
 player1Text = "Player1"
 player2Text = "Player2"
 
@@ -32,75 +38,77 @@ screen = pygame.display.set_mode(sizeScreen)
 pygame.display.set_caption('Snakes & Ladders')
 clock = pygame.time.Clock()
 
+#load background, scale it
 bg = pygame.image.load("bg.jpg")
 bg = pygame.transform.scale(bg,sizePitch)
 
 def quitGame():
-    #Ein QUIT-Event wird in Pygames Event-Warteschlange gepostet.
+    #run gamemanager, post QUIT-event in Pygames Event-Queue
     gamemanager.main()
     pygame.event.post(pygame.event.Event(pygame.QUIT))
 
 def background():
+    #blit background image
     screen.blit(bg,(0,0))
 
 def resetGame():
-    global diceNum, xStart, yStart, xNeu, yNeu, xMax, xMin, xUe, move, turn, player1Position, player2Position
+    #reset all valuables
+    global diceNum, xStart, yStart, xNew, yNew, xMax, xMin, xOv, move, turn, player1Position, player2Position
 
     xStart = 30
     yStart = 380
-    xAlt = xStart
-    yAlt = yStart
-    xNeu = 0
-    yNeu = 0
+    xNew = 0
+    yNew = 0
     xMax = 570
     xMin = 30
-    xUe = 0
+    xOv = 0
     player1Position = (xStart, yStart)
     player2Position = (xStart, yStart)
     move = False
     turn = False
 
-def text_objects(text, font, color):
+def textObjects(text, font, color):
     textSurface = font.render(text, True, color)
     return textSurface, textSurface.get_rect()
 
-def win(pT):
+def win(pT, color):
     pygame.time.wait(400)
     screen.fill(oliveGreen)
     playerWinText = pygame.font.Font('freesansbold.ttf',50)
-    textSurf, textRect = text_objects(pT, playerWinText, red)
+    textSurf, textRect = textObjects(pT, playerWinText, color)
     textRect.center = ((400),(150))
     screen.blit(textSurf, textRect)
     winText = pygame.font.Font('freesansbold.ttf',50)
-    textSurf, textRect = text_objects("you won", winText, red)
+    textSurf, textRect = textObjects("you won", winText, color)
     textRect.center = ((400),(250))
     screen.blit(textSurf, textRect)
     pygame.display.update()
     pygame.time.wait(5000)
+    resetGame()
     gamemanager.main()
 
 def playerText(pT, color):
     playerText = pygame.font.Font('freesansbold.ttf',30)
-    textSurf, textRect = text_objects(pT, playerText, color)
+    textSurf, textRect = textObjects(pT, playerText, color)
     textRect.center = ((700),(150))
     screen.blit(textSurf, textRect)
 
 def turnText():
     turnText = pygame.font.Font('freesansbold.ttf',30)
-    textSurf, textRect = text_objects("it´s your turn", turnText, black)
+    textSurf, textRect = textObjects("it´s your turn", turnText, black)
     textRect.center = ((700),(200))
     screen.blit(textSurf, textRect)
 
 def biteText():
-    biteText = pygame.font.Font('freesansbold.ttf',17)
-    textSurf, textRect = text_objects("you have been bitten", biteText, brightRed)
-    textRect.center = ((700),(200))
+    biteText = pygame.font.Font('freesansbold.ttf',22)
+    textSurf, textRect = textObjects("A snake bites you!", biteText, brightRed)
+    textRect.center = ((700),(80))
     screen.blit(textSurf, textRect)
 
 def ladderText():
-    ladderText = pygame.font.Font('freesansbold.ttf',17)
-    textSurf, textRect = text_objects("you have found a ladder", ladderText, brightRed)
-    textRect.center = ((700),(200))
+    ladderText = pygame.font.Font('freesansbold.ttf',22)
+    textSurf, textRect = textObjects("There´s a ladder!", ladderText, brightRed)
+    textRect.center = ((700),(100))
     screen.blit(textSurf, textRect)
 
 def button(text,x,y,w,h,mouseOn,mouseOff,action=None):
@@ -116,7 +124,7 @@ def button(text,x,y,w,h,mouseOn,mouseOff,action=None):
         pygame.draw.rect(screen, mouseOff,(x,y,w,h))
 
     buttonText = pygame.font.SysFont("comicsansms",20)
-    textSurf, textRect = text_objects(text, buttonText, black)
+    textSurf, textRect = textObjects(text, buttonText, black)
     textRect.center = ( (x+(w/2)), (y+(h/2)) )
     screen.blit(textSurf, textRect)
 
@@ -141,44 +149,44 @@ def reset_diplay():
 
 xStart = 30
 yStart = 380
-xNeu = 0
-yNeu = 0
+xNew = 0
+yNew = 0
 xMax = 570
 xMin = 30
-xUe = 0
+xOv = 0
 player1Position = (xStart, yStart)
 player2Position = (xStart, yStart)
 
 def movePlayer(playerPosition):
-    global diceNum, xStart, yStart, xNeu, yNeu, xMax, xMin, xUe
+    global diceNum, xStart, yStart, xNew, yNew, xMax, xMin, xOv
 
-    xAlt = playerPosition[0]
-    yAlt = playerPosition[1]
+    xOld = playerPosition[0]
+    yOld = playerPosition[1]
 
     if move:
-        if(yAlt % 80 == 60):
-            xNeu = xAlt + (diceNum * 60)
-            yNeu = yAlt
-            if xNeu > xMax:
-                yNeu = yAlt - 40
-                xUe = xNeu - xMax
-                xNeu = xMax - (xUe - 60)
+        if(yOld % 80 == 60):
+            xNew = xOld + (diceNum * 60)
+            yNew = yOld
+            if xNew > xMax:
+                yNew = yOld - 40
+                xOv = xNew - xMax
+                xNew = xMax - (xOv - 60)
 
-                xAlt = xNeu
-                yAlt = yNeu
-                xUe = 0
-                playerPosition = (xNeu, yNeu)
+                xOld = xNew
+                yOld = yNew
+                xOv = 0
+                playerPosition = (xNew, yNew)
         else:
-            xNeu = xAlt - (diceNum * 60)
-            yNeu = yAlt
-        if xNeu < xMin:
-            yNeu = yAlt -40
-            xNeu = xNeu * (-1)
+            xNew = xOld - (diceNum * 60)
+            yNew = yOld
+        if xNew < xMin:
+            yNew = yOld - 40
+            xNew = xNew * (-1)
 
-        xAlt = xNeu
-        yAlt = yNeu
-        xUe = 0
-    playerPosition = (xAlt, yAlt)
+        xOld = xNew
+        yOld = yNew
+        xOv = 0
+    playerPosition = (xOld, yOld)
 
     return playerPosition
 
@@ -201,18 +209,15 @@ def snakes(playerPosition):
         (90, 20): (150, 140)
     }
     if playerPosition in switchSnakes:
-        snake = True
         biteText()
-        pygame.draw.circle(screen, black, player1Position, srad, 0)
-        pygame.draw.circle(screen, magenta, player2Position, srad, 0)
+        pygame.draw.circle(screen, lawnGreen, player1Position, srad, 0)
+        pygame.draw.circle(screen, marineBlue, player2Position, srad, 0)
         pygame.display.update()
         pygame.time.wait(3000)
 
     return switchSnakes.get(playerPosition, playerPosition)
 
 def ladders(playerPosition):
-    #(3 : 20) (6 : 14) (11 : 28) (15 : 34) (17 : 74) (22 : 37)
-    # (38 : 59) (49 : 67) (57 : 76) (61 : 78) (73 : 86) (81 : 98) (88 : 91)
     switchLadders = {
         (150, 380): (30, 340),
         (330, 380): (390, 340),
@@ -229,17 +234,16 @@ def ladders(playerPosition):
         (450, 60): (570, 20)
     }
     if playerPosition in switchLadders:
-        ladder = True
         ladderText()
-        pygame.draw.circle(screen, black, player1Position, srad, 0)
-        pygame.draw.circle(screen, magenta, player2Position, srad, 0)
+        pygame.draw.circle(screen, lawnGreen, player1Position, srad, 0)
+        pygame.draw.circle(screen, marineBlue, player2Position, srad, 0)
         pygame.display.update()
         pygame.time.wait(3000)
 
     return switchLadders.get(playerPosition, playerPosition)
 
 def gameLoop():
-    global move, turn, snake, ladder, player1Position, player2Position
+    global move, turn, player1Position, player2Position
 
     reset_diplay()
 
@@ -257,23 +261,23 @@ def gameLoop():
         button("Quit",740,370,60,30,brightRed,red,quitGame)
         button("Reset",600,370,60,30,brightBlue,blue,resetGame)
 
-        #turnText()
+        turnText()
 
         if diceNum != 0:
             diceText = pygame.font.Font("freesansbold.ttf",24)
-            textSurf, textRect = text_objects(str(diceNum), diceText, black)
+            textSurf, textRect = textObjects(str(diceNum), diceText, black)
             textRect.center = ( (700), (325) )
             screen.blit(textSurf, textRect)
 
         if turn:
             player1Position = movePlayer(player1Position)
-            playerText(player2Text, magenta)
+            playerText(player2Text, marineBlue)
             player1Position = snakes(player1Position)
             player1Position = ladders(player1Position)
 
         else:
             player2Position = movePlayer(player2Position)
-            playerText(player1Text, black)
+            playerText(player1Text, lawnGreen)
             player2Position = snakes(player2Position)
             player2Position = ladders(player2Position)
 
@@ -283,17 +287,14 @@ def gameLoop():
             else:
                 player1Position = (xStart, yStart)
 
-        if snake == False & ladder == False:
-            turnText()
-
-        pygame.draw.circle(screen, black, player1Position, srad, 0)
-        pygame.draw.circle(screen, magenta, player2Position, srad, 0)
+        pygame.draw.circle(screen, lawnGreen, player1Position, srad, 0)
+        pygame.draw.circle(screen, marineBlue, player2Position, srad, 0)
 
         if (player1Position[1] == 20)  & (player1Position[0] == 30) | (player1Position[1] < 20):
-            win(player1Text)
+            win(player1Text, lawnGreen)
 
         if (player2Position[1] == 20)  & (player2Position[0] == 30) | (player2Position[1] < 20):
-            win(player2Text)
+            win(player2Text, marineBlue)
 
         move = False
         snake = False
