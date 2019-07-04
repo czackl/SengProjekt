@@ -5,12 +5,16 @@ from pygame.locals import *
 # import the other games
 import hangman
 import SnakesAndLadders
+import Tetrisfinal
 
 # define Colors
-white = (255,255,255)
-blue = (0, 0, 255)
-red = (255, 0, 0)
+white = (242, 225, 194)
+blue = (51, 89, 166)
+red = (130, 176, 217)
 
+# Load game preview Images
+Img_hangman = pygame.image.load("hangman_icon.png")
+Img_hangman = pygame.transform.scale(Img_hangman, (90, 130)) # transform to useful size
 
 def main():
 
@@ -37,7 +41,8 @@ def main():
             # keys pressed
             keys = pygame.key.get_pressed()
             if keys[K_RIGHT]:
-                hangman.main()
+                App = Tetrisfinal.TetrisApp()
+                App.run()
             if keys[K_LEFT]:
                 SnakesAndLadders.gameLoop()
 
@@ -45,8 +50,12 @@ def main():
         screen.fill(white)
 
         # print menu text
-        SnakesAndLadders.button("Hangman", width/2, 50, 100, 50, red, blue, hangman.main)
-        SnakesAndLadders.button("Snakes and Ladders", width/2, 100, 200, 50, red, blue, SnakesAndLadders.gameLoop)
+        SnakesAndLadders.button("Hangman", 40, 300, 100, 50, red, blue, hangman.main)
+        SnakesAndLadders.button("Snakes and Ladders", 150, 300, 200, 50, red, blue, SnakesAndLadders.gameLoop)
+
+        # print game preview Images
+        screen.blit (Img_hangman, (45, 150))
+
         # update and tick the Clock
         pygame.display.update()
 
