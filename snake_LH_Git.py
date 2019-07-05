@@ -1,19 +1,18 @@
 #!/usr/bin/python3
 """
 Alle Dokumentationskommentare gelten fuer die darauf Folgenden Zeilen:
-Importiert die Module um das Spiel spielen zu können
+Importiert die Module um das Spiel spielen zu koennen
 """
 import pygame
 import random
 import gamemanager
 
 # pygame.init()
-#Festlegen der Farben
+#Festlegen der Farbe
 BG = (255, 255, 255)
-FEIND = (120, 40, 120)
-
+FEIND = (0, 0, 0)
 """
-Laedt die Bilder fuer die Objekte, legt die Bildgroessn fest und hinterlegt
+Laedt die Bilder fuer die Objekte, legt die Bildgroessen fest und hinterlegt
 alles als Variable
 """
 #Festlegen der Bilder und der bildgroessen
@@ -24,10 +23,10 @@ sg = pygame.transform.scale(sg, scale)
 apl = pygame.image.load("apfel.png")
 apl = pygame.transform.scale(apl,scale)
 
-fd = pygame.image.load("apfel.png")
+fd = pygame.image.load("fd.png")
 fd = pygame.transform.scale(fd,scale)
 
-#Festlegen der Feldgroeße
+#Festlegen der Feldgroesse
 FELD_B = 600
 FELD_H = 600
 
@@ -96,9 +95,11 @@ Erschafft das Kaestchen der Schlange an einem zufaelligen Ort und verschiebt die
 in die Schlange und auch in allKaestchen
 """
 kaestchen = Kaestchen(sg, QUADRAT_SEITE, QUADRAT_SEITE)
+
 #Zufaelligen Startpunkt fuer Schlange finden
 kaestchen.rect.x = random.randrange(int(FELD_B / 25)) * 25
 kaestchen.rect.y = random.randrange(int(FELD_H / 25)) * 25
+
 snake.append(kaestchen)
 allKaestchen.add(kaestchen)
 
@@ -108,8 +109,10 @@ in allKaestchen
 """
 #Apfel an zufaelliger Position generieren
 apfel = Kaestchen(apl, QUADRAT_SEITE, QUADRAT_SEITE)
+
 apfel.rect.x = random.randrange(int(FELD_B / 25)) * 25
 apfel.rect.y = random.randrange(int(FELD_H / 25)) * 25
+
 allKaestchen.add(apfel)
 
 # screen.blit(sg,(kaestchen.rect.x, kaestchen.rect.y))
@@ -131,7 +134,7 @@ for index in range(FEINDE):
 stop = False
 
 """
-Funktion lädt die Bilder an die aktuelle Position des jeweiligen Kaestchens,
+Funktion laedt die Bilder an die aktuelle Position des jeweiligen Kaestchens,
 welches sich in allKaestchen befindet.
 """
 def print_Bilder(allKaestchen):
@@ -185,7 +188,7 @@ def main():
         """
         In den hit_(...)-Abschnitten wird getestet, ob die Schlange auf sich selbst,
         einen Apfel oder einen Feind trifft. Je nachdem werden die gesammelten Elemente
-        der Schlange wieder zurückgesetzt (Schlange trifft Schlange & Schlange trifft Feind)
+        der Schlange wieder zurueckgesetzt (Schlange trifft Schlange & Schlange trifft Feind)
         oder aber um ein Element verlaengert (Schlange trifft Apfel).
         """
         #Pruefen ob Schlange auf Feind getroffen ist
