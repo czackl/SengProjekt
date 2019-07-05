@@ -1,4 +1,8 @@
 #!/usr/bin/python3
+"""
+Alle Dokumentationskommentare gelten fuer die darauf Folgenden Zeilen:
+Importiert die Module um das Spiel spielen zu können
+"""
 import pygame
 import random
 import gamemanager
@@ -8,7 +12,11 @@ import gamemanager
 BG = (255, 255, 255)
 FEIND = (120, 40, 120)
 
-#Festlegen der Bilder und der bildgroeßenc
+"""
+Laedt die Bilder fuer die Objekte, legt die Bildgroessn fest und hinterlegt
+alles als Variable
+"""
+#Festlegen der Bilder und der bildgroessen
 scale = width, height = 20, 20
 sg = pygame.image.load("schlange.png")
 sg = pygame.transform.scale(sg, scale)
@@ -29,6 +37,10 @@ QUADRAT_SEITE = 20
 #Anzahl der Feinde festlegen
 FEINDE = 3
 
+"""
+Legt die Klasse fest, um alle Spielelemente als Kaestchen festzulegen und Sprite liefert
+Funktionalitaeten wie beispielsweise eine Kollision
+"""
 #Spielfeld mit Ein- und Austrittsfunktion sowie der Geschwindigkeit initialisieren
 class Kaestchen(pygame.sprite.Sprite):
     def __init__(self, color, width, height):
@@ -43,7 +55,9 @@ class Kaestchen(pygame.sprite.Sprite):
         self.change_x = 0
         self.change_y = 0
 
-
+    """
+    Initialisiert die Randfunktion, die für die "Portale" sorgt
+    """
     def update(self):
 
         if self.rect.x + QUADRAT_SEITE > FELD_B:
@@ -63,7 +77,12 @@ class Kaestchen(pygame.sprite.Sprite):
         self.change_y = y
 
 
-
+"""
+Initialisiert das Spielfeld mitsamt Groesse.
+snake = [] erschafft ein Array in das spaeter alle gesammelten Kaestchen geschoben werden.
+allKaestchen wird geschaffen und erbt von Sprite, damit eine Kollision abgefragt werden kann.
+Ebenfalls werden die Feinde dorthin verschoben.
+"""
 pygame.init()
 screen = pygame.display.set_mode([FELD_B, FELD_H])
 clock = pygame.time.Clock()
@@ -72,30 +91,37 @@ snake = []
 allKaestchen = pygame.sprite.Group()
 feinde = pygame.sprite.Group()
 
+"""
+Erschafft das Kaestchen der Schlange an einem zufaelligen Ort und verschiebt dieses Kaestchen
+in die Schlange und auch in allKaestchen
+"""
 kaestchen = Kaestchen(sg, QUADRAT_SEITE, QUADRAT_SEITE)
-
 #Zufaelligen Startpunkt fuer Schlange finden
 kaestchen.rect.x = random.randrange(int(FELD_B / 25)) * 25
 kaestchen.rect.y = random.randrange(int(FELD_H / 25)) * 25
-
 snake.append(kaestchen)
 allKaestchen.add(kaestchen)
 
+"""
+Erschafft das Kaestchen des Apfels an einem zufaelligen Ort und verschiebt dieses Kaestchen
+in allKaestchen
+"""
 #Apfel an zufaelliger Position generieren
 apfel = Kaestchen(apl, QUADRAT_SEITE, QUADRAT_SEITE)
-
 apfel.rect.x = random.randrange(int(FELD_B / 25)) * 25
 apfel.rect.y = random.randrange(int(FELD_H / 25)) * 25
-
 allKaestchen.add(apfel)
 
 # screen.blit(sg,(kaestchen.rect.x, kaestchen.rect.y))
 # screen.blit(apl,(apfel.rect.x, apfel.rect.y))
 
+"""
+Generiert die 3 Feinde an zufaelliger Position, belegt diese mit dem zugeorneten
+Bild und schiebt die Feinde in allKaestchen.
+"""
 #Feinde an zufaelliger Position generieren
 for index in range(FEINDE):
-    ########################################## sd-> fd
-    feind = Kaestchen(sg, QUADRAT_SEITE, QUADRAT_SEITE)
+    feind = Kaestchen(fd, QUADRAT_SEITE, QUADRAT_SEITE)
     feind.rect.x = random.randrange(int(FELD_B / 25)) * 25
     feind.rect.y = random.randrange(int(FELD_H / 25)) * 25
     feinde.add(feind)
@@ -104,6 +130,10 @@ for index in range(FEINDE):
 
 stop = False
 
+"""
+Funktion lädt die Bilder an die aktuelle Position des jeweiligen Kaestchens,
+welches sich in allKaestchen befindet.
+"""
 def print_Bilder(allKaestchen):
     for b in allKaestchen:
         screen.blit(b.bild, (b.rect.x, b.rect.y))
@@ -114,6 +144,9 @@ def reset_game_variables():
 
     screen = pygame.display.set_mode([FELD_B, FELD_H])
 
+"""
+Wandelt die vorher lokal definierten Variablen in globale um, damit diese auch in der main-Methode funktionieren.
+"""
 def main():
     global stop
     global snake
@@ -121,11 +154,24 @@ def main():
 
     reset_game_variables()
 
+
+    """
+    Ist das Gameloop, das solange laeuft, bis die "stop"-Bedingung auf True gesetzt wird.
+    Zudem fuehrt die Schleife bei Schliessen des Fensters zurueck zum Gamemanager.
+    """
     while not stop:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 stop = True
                 gamemanager.main()
+
+            """
+            Steuerung:
+            Pfeil-links: Spieler bewegt sich nach links
+            Pfeil-rechts: Spieler bewegt sich nach rechts
+            Pfeil-hoch: Spieler bewegt sich nach oben
+            Pfeil-runter: Spieler bewegt sich nach unten
+            """
             #Steuerung mit den Pfeiltasten definieren
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT and snake[0].change_x != 25:
@@ -138,7 +184,12 @@ def main():
                     snake[0].changespeed(0, 25)
 
 
-
+        """
+        In den hit_(...)-Abschnitten wird getestet, ob die Schlange auf sich selbst,
+        einen Apfel oder einen Feind trifft. Je nachdem werden die gesammelten Elemente
+        der Schlange wieder zurückgesetzt (Schlange trifft Schlange & Schlange trifft Feind)
+        oder aber um ein Element verlaengert (Schlange trifft Apfel).
+        """
         #Pruefen ob Schlange auf Feind getroffen ist
         hit_Kaestchen = pygame.sprite.spritecollide(snake[0], feinde, False)
 
@@ -188,6 +239,14 @@ def main():
 
         snake[0].update()
 
+
+        """
+        screen.fill definiert den Hintergrund, Print_Bilder bezieht die vorher definierten
+        und in der Funktion allKaestchen abgelegten Bilder. Weiterhin werden diese Bilder
+        dem jeweiligen Objekt zugeordnet.
+
+        clock.tick definiert die Geschwindigkeit der Schlange
+        """
         screen.fill(BG)
 
         # allKaestchen.draw(screen)
