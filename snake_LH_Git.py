@@ -6,7 +6,12 @@ import random
 K = (0, 0, 0)
 BG = (255, 255, 255)
 APPLE = (255, 0, 0)
-SNAKE = (0, 255, 0)
+FEIND = (120, 40, 120)
+
+#Festlegen der Bilder
+sg = pygame.image.load("schlange.png")
+apl = pygame.image.load("apfel.png")
+
 
 #Festlegen der Feldgroeße
 FELD_B = 600
@@ -18,7 +23,7 @@ QUADRAT_SEITE = 20
 #Anzahl der Feinde festlegen
 FEINDE = 3
 
-#Spielfeld und Geschwindigkeit initialisieren
+#Spielfeld mit Ein- und Austrittsfunktion sowie der Geschwindigkeit initialisieren
 class Kaestchen(pygame.sprite.Sprite):
     def __init__(self, color, width, height):
 
@@ -81,7 +86,7 @@ allKaestchen.add(apfel)
 
 #Feinde an zufaelliger Position generieren
 for index in range(FEINDE):
-    feind = Kaestchen(SNAKE, QUADRAT_SEITE, QUADRAT_SEITE)
+    feind = Kaestchen(FEIND, QUADRAT_SEITE, QUADRAT_SEITE)
     feind.rect.x = random.randrange(int(FELD_B / 25)) * 25
     feind.rect.y = random.randrange(int(FELD_H / 25)) * 25
     feinde.add(feind)
@@ -116,7 +121,7 @@ while not stop:
                 allKaestchen.remove(element)
                 snake = snake[:1]
 
-
+    #Pruefen ob Schlange auf sich selbst getroffen ist
     hit_Kaestchen = pygame.sprite.spritecollide(snake[0], snake, False)
 
     if hit_Kaestchen and len(hit_Kaestchen) > 1:
@@ -162,7 +167,7 @@ while not stop:
 
     pygame.display.flip()
 
-    #10 FPS
-    clock.tick(10)
+    #9 FPS
+    clock.tick(9)
 
 pygame.quit()
