@@ -2,16 +2,21 @@
 import pygame
 import random
 
+# pygame.init()
 #Festlegen der Farben
-K = (0, 0, 0)
 BG = (255, 255, 255)
-APPLE = (255, 0, 0)
 FEIND = (120, 40, 120)
 
-#Festlegen der Bilder
+#Festlegen der Bilder und der bildgroeßenc
+scale = width, height = 20, 20
 sg = pygame.image.load("schlange.png")
-apl = pygame.image.load("apfel.png")
+sg = pygame.transform.scale(sg, scale)
 
+apl = pygame.image.load("apfel.png")
+apl = pygame.transform.scale(apl,scale)
+
+fd = pygame.image.load("apfel.png")
+fd = pygame.transform.scale(fd,scale)
 
 #Festlegen der Feldgroeße
 FELD_B = 600
@@ -30,7 +35,8 @@ class Kaestchen(pygame.sprite.Sprite):
         super().__init__()
 
         self.image = pygame.Surface([width, height])
-        self.image.fill(color)
+        self.image.fill(FEIND)
+        self.bild = color
 
         self.rect = self.image.get_rect()
         self.change_x = 0
@@ -58,7 +64,6 @@ class Kaestchen(pygame.sprite.Sprite):
 
 
 pygame.init()
-
 screen = pygame.display.set_mode([FELD_B, FELD_H])
 clock = pygame.time.Clock()
 
@@ -66,7 +71,7 @@ snake = []
 allKaestchen = pygame.sprite.Group()
 feinde = pygame.sprite.Group()
 
-kaestchen = Kaestchen(K, QUADRAT_SEITE, QUADRAT_SEITE)
+kaestchen = Kaestchen(sg, QUADRAT_SEITE, QUADRAT_SEITE)
 
 #Zufaelligen Startpunkt fuer Schlange finden
 kaestchen.rect.x = random.randrange(int(FELD_B / 25)) * 25
@@ -75,18 +80,21 @@ kaestchen.rect.y = random.randrange(int(FELD_H / 25)) * 25
 snake.append(kaestchen)
 allKaestchen.add(kaestchen)
 
-
 #Apfel an zufaelliger Position generieren
-apfel = Kaestchen(APPLE, QUADRAT_SEITE, QUADRAT_SEITE)
+apfel = Kaestchen(apl, QUADRAT_SEITE, QUADRAT_SEITE)
 
 apfel.rect.x = random.randrange(int(FELD_B / 25)) * 25
 apfel.rect.y = random.randrange(int(FELD_H / 25)) * 25
 
 allKaestchen.add(apfel)
 
+# screen.blit(sg,(kaestchen.rect.x, kaestchen.rect.y))
+# screen.blit(apl,(apfel.rect.x, apfel.rect.y))
+
 #Feinde an zufaelliger Position generieren
 for index in range(FEINDE):
-    feind = Kaestchen(FEIND, QUADRAT_SEITE, QUADRAT_SEITE)
+    ########################################## sd-> fd
+    feind = Kaestchen(sg, QUADRAT_SEITE, QUADRAT_SEITE)
     feind.rect.x = random.randrange(int(FELD_B / 25)) * 25
     feind.rect.y = random.randrange(int(FELD_H / 25)) * 25
     feinde.add(feind)
@@ -94,6 +102,10 @@ for index in range(FEINDE):
 
 
 stop = False
+
+def print_Bilder(allKaestchen):
+    for b in allKaestchen:
+        screen.blit(b.bild, (b.rect.x, b.rect.y))
 
 while not stop:
     for event in pygame.event.get():
@@ -136,7 +148,7 @@ while not stop:
     newKaestchen = None
 
     if hit_Kaestchen:
-        newKaestchen = Kaestchen(K, QUADRAT_SEITE, QUADRAT_SEITE)
+        newKaestchen = Kaestchen(sg, QUADRAT_SEITE, QUADRAT_SEITE)
         newKaestchen.rect.x = snake[-1].rect.x
         newKaestchen.rect.y = snake[-1].rect.y
 
@@ -163,8 +175,8 @@ while not stop:
 
     screen.fill(BG)
 
-    allKaestchen.draw(screen)
-
+    # allKaestchen.draw(screen)
+    print_Bilder(allKaestchen)
     pygame.display.flip()
 
     #9 FPS
