@@ -6,7 +6,7 @@ from pygame.locals import *
 import hangman
 import SnakesAndLadders
 import Tetrisfinal
-# import snake_LH_Git
+import snake_LH_Git
 
 App = Tetrisfinal.TetrisApp()
 
@@ -58,7 +58,8 @@ def main():
         SnakesAndLadders.button("Hangman", 40, 300, 100, 50, red, blue, hangman.main)
         SnakesAndLadders.button("Snakes and Ladders", 150, 300, 200, 50, red, blue, SnakesAndLadders.gameLoop)
         SnakesAndLadders.button("Tetris", 370, 300, 80, 50, red, blue, App.run)
-        # SnakesAndLadders.button("Snake", 480, 300, 80, 50, red, blue, snake_LH_Git)
+        SnakesAndLadders.button("Snake", 480, 300, 80, 50, red, blue, snake_LH_Git.main)
+
         # print game preview Images
         screen.blit (Img_hangman, (45, 150))
         screen.blit (Img_sal, (150,150))

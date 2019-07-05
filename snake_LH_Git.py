@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import pygame
 import random
+import gamemanager
 
 # pygame.init()
 #Festlegen der Farben
@@ -107,79 +108,96 @@ def print_Bilder(allKaestchen):
     for b in allKaestchen:
         screen.blit(b.bild, (b.rect.x, b.rect.y))
 
-while not stop:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            stop = True
-        #Steuerung mit den Pfeiltasten definieren
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT and snake[0].change_x != 25:
-                snake[0].changespeed(-25, 0)
-            elif event.key == pygame.K_RIGHT and snake[0].change_x != -25:
-                snake[0].changespeed(25, 0)
-            elif event.key == pygame.K_UP and snake[0].change_y != 25:
-                snake[0].changespeed(0, -25)
-            elif event.key == pygame.K_DOWN and snake[0].change_y != -25:
-                snake[0].changespeed(0, 25)
+def reset_game_variables():
+    global stop
+    stop = False
+
+    screen = pygame.display.set_mode([FELD_B, FELD_H])
+
+def main():
+    global stop
+    global snake
+    global allKaestchen
+
+    reset_game_variables()
+
+    while not stop:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                stop = True
+                gamemanager.main()
+            #Steuerung mit den Pfeiltasten definieren
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT and snake[0].change_x != 25:
+                    snake[0].changespeed(-25, 0)
+                elif event.key == pygame.K_RIGHT and snake[0].change_x != -25:
+                    snake[0].changespeed(25, 0)
+                elif event.key == pygame.K_UP and snake[0].change_y != 25:
+                    snake[0].changespeed(0, -25)
+                elif event.key == pygame.K_DOWN and snake[0].change_y != -25:
+                    snake[0].changespeed(0, 25)
 
 
 
-    #Pruefen ob Schlange auf Feind getroffen ist
-    hit_Kaestchen = pygame.sprite.spritecollide(snake[0], feinde, False)
+        #Pruefen ob Schlange auf Feind getroffen ist
+        hit_Kaestchen = pygame.sprite.spritecollide(snake[0], feinde, False)
 
-    if hit_Kaestchen:
-        for element in snake:
-            if element != snake[0]:
-                allKaestchen.remove(element)
-                snake = snake[:1]
+        if hit_Kaestchen:
+            for element in snake:
+                if element != snake[0]:
+                    allKaestchen.remove(element)
+                    snake = snake[:1]
 
-    #Pruefen ob Schlange auf sich selbst getroffen ist
-    hit_Kaestchen = pygame.sprite.spritecollide(snake[0], snake, False)
+        #Pruefen ob Schlange auf sich selbst getroffen ist
+        hit_Kaestchen = pygame.sprite.spritecollide(snake[0], snake, False)
 
-    if hit_Kaestchen and len(hit_Kaestchen) > 1:
-        for element in snake:
-            if element != snake[0]:
-                allKaestchen.remove(element)
-                snake = snake[:1]
+        if hit_Kaestchen and len(hit_Kaestchen) > 1:
+            for element in snake:
+                if element != snake[0]:
+                    allKaestchen.remove(element)
+                    snake = snake[:1]
 
-    #Pruefen ob Schlange Apfel gefunden hat
-    hit_Kaestchen = pygame.sprite.spritecollide(snake[0], [apfel], False)
+        #Pruefen ob Schlange Apfel gefunden hat
+        hit_Kaestchen = pygame.sprite.spritecollide(snake[0], [apfel], False)
 
-    newKaestchen = None
+        newKaestchen = None
 
-    if hit_Kaestchen:
-        newKaestchen = Kaestchen(sg, QUADRAT_SEITE, QUADRAT_SEITE)
-        newKaestchen.rect.x = snake[-1].rect.x
-        newKaestchen.rect.y = snake[-1].rect.y
+        if hit_Kaestchen:
+            newKaestchen = Kaestchen(sg, QUADRAT_SEITE, QUADRAT_SEITE)
+            newKaestchen.rect.x = snake[-1].rect.x
+            newKaestchen.rect.y = snake[-1].rect.y
 
-        snake.append(newKaestchen)
-        allKaestchen.add(newKaestchen)
+            snake.append(newKaestchen)
+            allKaestchen.add(newKaestchen)
 
-        #Position fuer Apfel erstellen ohne dass diese gleich wie die der Schlange oder der Feinde ist
-        while True:
-            apfel.rect.x = random.randrange(int(FELD_B / 25)) * 25
-            apfel.rect.y = random.randrange(int(FELD_H / 25)) * 25
-            hit_Kaestchen = pygame.sprite.spritecollide(apfel, snake, False)
-            hit_Kaestchen2 = pygame.sprite.spritecollide(apfel, feinde, False)
+            #Position fuer Apfel erstellen ohne dass diese gleich wie die der Schlange oder der Feinde ist
+            while True:
+                apfel.rect.x = random.randrange(int(FELD_B / 25)) * 25
+                apfel.rect.y = random.randrange(int(FELD_H / 25)) * 25
+                hit_Kaestchen = pygame.sprite.spritecollide(apfel, snake, False)
+                hit_Kaestchen2 = pygame.sprite.spritecollide(apfel, feinde, False)
 
-            if not hit_Kaestchen and not hit_Kaestchen2:
-                break
+                if not hit_Kaestchen and not hit_Kaestchen2:
+                    break
 
 
-    #Anhaengsel zum hinterherlaufen bringen
-    for index in range(len(snake) - 1, 0, -1):
-        snake[index].rect.x = snake[index - 1].rect.x
-        snake[index].rect.y = snake[index - 1].rect.y
+        #Anhaengsel zum hinterherlaufen bringen
+        for index in range(len(snake) - 1, 0, -1):
+            snake[index].rect.x = snake[index - 1].rect.x
+            snake[index].rect.y = snake[index - 1].rect.y
 
-    snake[0].update()
+        snake[0].update()
 
-    screen.fill(BG)
+        screen.fill(BG)
 
-    # allKaestchen.draw(screen)
-    print_Bilder(allKaestchen)
-    pygame.display.flip()
+        # allKaestchen.draw(screen)
+        print_Bilder(allKaestchen)
+        pygame.display.flip()
 
-    #9 FPS
-    clock.tick(9)
+        #9 FPS
+        clock.tick(9)
 
-pygame.quit()
+if __name__ == "__main__":
+    main()
+
+# pygame.quit()
