@@ -6,6 +6,9 @@ from pygame.locals import *
 import hangman
 import SnakesAndLadders
 import Tetrisfinal
+# import snake_LH_Git
+
+App = Tetrisfinal.TetrisApp()
 
 # define Colors
 white = (242, 225, 194)
@@ -43,7 +46,7 @@ def main():
             # keys pressed
             keys = pygame.key.get_pressed()
             if keys[K_RIGHT]:
-                App = Tetrisfinal.TetrisApp()
+                # App = Tetrisfinal.TetrisApp()
                 App.run()
             if keys[K_LEFT]:
                 SnakesAndLadders.gameLoop()
@@ -54,7 +57,8 @@ def main():
         # print menu text
         SnakesAndLadders.button("Hangman", 40, 300, 100, 50, red, blue, hangman.main)
         SnakesAndLadders.button("Snakes and Ladders", 150, 300, 200, 50, red, blue, SnakesAndLadders.gameLoop)
-
+        SnakesAndLadders.button("Tetris", 370, 300, 80, 50, red, blue, App.run)
+        # SnakesAndLadders.button("Snake", 480, 300, 80, 50, red, blue, snake_LH_Git)
         # print game preview Images
         screen.blit (Img_hangman, (45, 150))
         screen.blit (Img_sal, (150,150))

@@ -191,6 +191,9 @@ class TetrisApp(object):
 			self.gameover = False
 
 	def run(self):
+		self.screen = pygame.display.set_mode((self.width, self.height))
+		pygame.display.update()
+
 		key_actions = {
 			'ESCAPE':	self.quit,
 			'LEFT':		lambda:self.move(-1),
