@@ -48,8 +48,8 @@ tetris_shapes = [
 
 def rotate_clockwise(shape):
 	return [ [ shape[y][x]
-			for y in xrange(len(shape)) ]
-		for x in xrange(len(shape[0]) - 1, -1, -1) ]
+			for y in range(len(shape)) ]
+		for x in range(len(shape[0]) - 1, -1, -1) ]
 
 def check_collision(board, shape, offset):
 	off_x, off_y = offset
@@ -64,7 +64,7 @@ def check_collision(board, shape, offset):
 
 def remove_row(board, row):
 	del board[row]
-	return [[0 for i in xrange(config['cols'])]] + board
+	return [[0 for i in range(config['cols'])]] + board
 
 def join_matrixes(mat1, mat2, mat2_off):
 	off_x, off_y = mat2_off
@@ -74,9 +74,9 @@ def join_matrixes(mat1, mat2, mat2_off):
 	return mat1
 
 def new_board():
-	board = [ [ 0 for x in xrange(config['cols']) ]
-			for y in xrange(config['rows']) ]
-	board += [[ 1 for x in xrange(config['cols'])]]
+	board = [ [ 0 for x in range(config['cols']) ]
+			for y in range(config['rows']) ]
+	board += [[ 1 for x in range(config['cols'])]]
 	return board
 
 class TetrisApp(object):
