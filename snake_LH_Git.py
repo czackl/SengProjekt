@@ -2,122 +2,167 @@
 import pygame
 import random
 
+#Festlegen der Farben
+K = (0, 0, 0)
+BG = (255, 255, 255)
+APPLE = (255, 0, 0)
+SNAKE = (0, 255, 0)
 
-FELD_H = 600
+#Festlegen der Feldgroeße
 FELD_B = 600
-QUADRAT_S_L = 20
+FELD_H = 600
 
-scale = width, height = 20, 20
+#Groeße der Kaestchen festlegen
+QUADRAT_SEITE = 20
 
-BG = (230, 255, 230)
-SNAKE = pygame.image.load("schlange.png")
-SNAKE = pygame.transform.scale(SNAKE, scale)
-APPLE = pygame.image.load("apfel.png")
-APPLE = pygame.transform.scale(APPLE, scale)
+#Anzahl der Feinde festlegen
+FEINDE = 3
 
-
+#Spielfeld und Geschwindigkeit initialisieren
 class Kaestchen(pygame.sprite.Sprite):
     def __init__(self, color, width, height):
+
         super().__init__()
 
         self.image = pygame.Surface([width, height])
         self.image.fill(color)
+
         self.rect = self.image.get_rect()
         self.change_x = 0
         self.change_y = 0
 
+
     def update(self):
-        if self.rect.x + QUADRAT_S_L > FELD_B:
+
+        if self.rect.x + QUADRAT_SEITE > FELD_B:
             self.rect.x = 0
         elif self.rect.x < 0:
-            self.rect.x = FELD_B - QUADRAT_S_L - 5
-        elif self.rect.y + QUADRAT_S_L > FELD_B:
+            self.rect.x = FELD_B - QUADRAT_SEITE - 5
+        elif self.rect.y + QUADRAT_SEITE > FELD_H:
             self.rect.y = 0
         elif self.rect.y < 0:
-            self.rect.y = FELD_H - QUADRAT_S_L - 5
+            self.rect.y = FELD_H - QUADRAT_SEITE - 5
         else:
             self.rect.x += self.change_x
             self.rect.y += self.change_y
 
-    def changeSpeed(self, x, y):
+    def changespeed(self, x, y):
         self.change_x = x
         self.change_y = y
 
 
-def main():
-    pygame.init()
-    feld = pygame.display.set_mode ([FELD_B, FELD_H])
-    clock = pygame.time.Clock()
-    snake = []
-    allKaestchen = pygame.sprite.Group()
 
-    kaestchen = Kaestchen(SNAKE, scale)
-    kaestchen.rect.x = random.randrange(int(FELD_B/25))*25
-    kaestchen.rect.y = random.randrange(int(FELD_H/25))*25
+pygame.init()
 
-    snake.append(kaestchen)
-    allKaestchen.add(kaestchen)
+screen = pygame.display.set_mode([FELD_B, FELD_H])
+clock = pygame.time.Clock()
 
-    apfel = Kaestchen(APPLE, scale)
-    apfel.rect.x = random.randrange(int(FELD_B/25))*25
-    apfel.rect.y = random.randrange(int(FELD_H/25))*25
-    allKaestchen.add(apfel)
+snake = []
+allKaestchen = pygame.sprite.Group()
+feinde = pygame.sprite.Group()
 
-    stop = False
+kaestchen = Kaestchen(K, QUADRAT_SEITE, QUADRAT_SEITE)
 
-    while not stop:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                stop = True
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP and snake[0].change_y != 25:
-                    snake[0].changeSpeed(0, -25)
-                elif event.key == pygame.K_DOWN and snake[0].change_y != -25:
-                    snake[0].changeSpeed(0, 25)
-                elif event.key == pygame.K_LEFT and snake[0].change_x != 25:
-                    snake[0].changeSpeed(-25, 0)
-                elif event.key == pygame.K_RIGHT and snake[0].change_x !=-25:
-                    snake[0].changeSpeed(25, 0)
+#Zufaelligen Startpunkt fuer Schlange finden
+kaestchen.rect.x = random.randrange(int(FELD_B / 25)) * 25
+kaestchen.rect.y = random.randrange(int(FELD_H / 25)) * 25
 
-    hit_Kaestchen = pygame.sprite.spritecollide(snake[0], snake, False)
-    if hit_Kaestchen and len(hit_Kaestchen) > 1:
+snake.append(kaestchen)
+allKaestchen.add(kaestchen)
+
+
+#Apfel an zufaelliger Position generieren
+apfel = Kaestchen(APPLE, QUADRAT_SEITE, QUADRAT_SEITE)
+
+apfel.rect.x = random.randrange(int(FELD_B / 25)) * 25
+apfel.rect.y = random.randrange(int(FELD_H / 25)) * 25
+
+allKaestchen.add(apfel)
+
+#Feinde an zufaelliger Position generieren
+for index in range(FEINDE):
+    feind = Kaestchen(SNAKE, QUADRAT_SEITE, QUADRAT_SEITE)
+    feind.rect.x = random.randrange(int(FELD_B / 25)) * 25
+    feind.rect.y = random.randrange(int(FELD_H / 25)) * 25
+    feinde.add(feind)
+    allKaestchen.add(feind)
+
+
+stop = False
+
+while not stop:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            stop = True
+        #Steuerung mit den Pfeiltasten definieren
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT and snake[0].change_x != 25:
+                snake[0].changespeed(-25, 0)
+            elif event.key == pygame.K_RIGHT and snake[0].change_x != -25:
+                snake[0].changespeed(25, 0)
+            elif event.key == pygame.K_UP and snake[0].change_y != 25:
+                snake[0].changespeed(0, -25)
+            elif event.key == pygame.K_DOWN and snake[0].change_y != -25:
+                snake[0].changespeed(0, 25)
+
+
+
+    #Pruefen ob Schlange auf Feind getroffen ist
+    hit_Kaestchen = pygame.sprite.spritecollide(snake[0], feinde, False)
+
+    if hit_Kaestchen:
         for element in snake:
             if element != snake[0]:
                 allKaestchen.remove(element)
                 snake = snake[:1]
 
 
+    hit_Kaestchen = pygame.sprite.spritecollide(snake[0], snake, False)
+
+    if hit_Kaestchen and len(hit_Kaestchen) > 1:
+        for element in snake:
+            if element != snake[0]:
+                allKaestchen.remove(element)
+                snake = snake[:1]
+
+    #Pruefen ob Schlange Apfel gefunden hat
     hit_Kaestchen = pygame.sprite.spritecollide(snake[0], [apfel], False)
+
     newKaestchen = None
 
     if hit_Kaestchen:
-        newKaestchen = Kaestchen(SNAKE, scale)
+        newKaestchen = Kaestchen(K, QUADRAT_SEITE, QUADRAT_SEITE)
         newKaestchen.rect.x = snake[-1].rect.x
         newKaestchen.rect.y = snake[-1].rect.y
 
         snake.append(newKaestchen)
         allKaestchen.add(newKaestchen)
 
+        #Position fuer Apfel erstellen ohne dass diese gleich wie die der Schlange oder der Feinde ist
         while True:
-            apfel.rect.x = random.randrange(int(FELD_B/25))*25
-            apfel.rect.y = random.randrange(int(FELD_H/25))*25
+            apfel.rect.x = random.randrange(int(FELD_B / 25)) * 25
+            apfel.rect.y = random.randrange(int(FELD_H / 25)) * 25
             hit_Kaestchen = pygame.sprite.spritecollide(apfel, snake, False)
+            hit_Kaestchen2 = pygame.sprite.spritecollide(apfel, feinde, False)
 
-            if not hit_Kaestchen:
+            if not hit_Kaestchen and not hit_Kaestchen2:
                 break
 
-    for index in range(len(snake)-1, 0 -1):
-        snake[index].rect.x = snake[index -1].rect.x
-        snake[index].rect.y = snake[index -1].rect.y
+
+    #Anhaengsel zum hinterherlaufen bringen
+    for index in range(len(snake) - 1, 0, -1):
+        snake[index].rect.x = snake[index - 1].rect.x
+        snake[index].rect.y = snake[index - 1].rect.y
 
     snake[0].update()
 
-    feld.fill(BG)
-    allKaestchen.draw(feld)
+    screen.fill(BG)
+
+    allKaestchen.draw(screen)
 
     pygame.display.flip()
-    clock.tick(8)
 
-    pygame.quit()
-if __name__ == "__main__":
-    main()
+    #10 FPS
+    clock.tick(10)
+
+pygame.quit()
