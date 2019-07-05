@@ -156,8 +156,13 @@ def main():
 
 
     """
-    Ist das Gameloop, das solange laeuft, bis die "stop"-Bedingung auf True gesetzt wird.
+    Ist die Gameloop-Funktion, das solange laeuft, bis die "stop"-Bedingung auf True gesetzt wird.
     Zudem fuehrt die Schleife bei Schliessen des Fensters zurueck zum Gamemanager.
+                Steuerung:
+                Pfeil-links: Spieler bewegt sich nach links
+                Pfeil-rechts: Spieler bewegt sich nach rechts
+                Pfeil-hoch: Spieler bewegt sich nach oben
+                Pfeil-runter: Spieler bewegt sich nach unten
     """
     while not stop:
         for event in pygame.event.get():
@@ -165,13 +170,6 @@ def main():
                 stop = True
                 gamemanager.main()
 
-            """
-            Steuerung:
-            Pfeil-links: Spieler bewegt sich nach links
-            Pfeil-rechts: Spieler bewegt sich nach rechts
-            Pfeil-hoch: Spieler bewegt sich nach oben
-            Pfeil-runter: Spieler bewegt sich nach unten
-            """
             #Steuerung mit den Pfeiltasten definieren
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT and snake[0].change_x != 25:
