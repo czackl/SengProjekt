@@ -19,7 +19,7 @@ red = (130, 176, 217)
 Img_hangman = pygame.image.load("hangman_icon.png")
 Img_hangman = pygame.transform.scale(Img_hangman, (90, 130)) # transform to useful size
 Img_sal = pygame.image.load("bg.jpg")
-Img_sal = pygame.transform.scale(Img_sal, (200, 130))
+Img_sal = pygame.transform.scale(Img_sal, (210, 130))
 
 def main():
 
@@ -43,22 +43,14 @@ def main():
                 pygame.quit()
                 exit(0)
 
-            # keys pressed
-            keys = pygame.key.get_pressed()
-            if keys[K_RIGHT]:
-                # App = Tetrisfinal.TetrisApp()
-                App.run()
-            if keys[K_LEFT]:
-                SnakesAndLadders.gameLoop()
-
         # refresh window
         screen.fill(white)
 
         # print menu text
-        SnakesAndLadders.button("Hangman", 40, 300, 100, 50, red, blue, hangman.main)
-        SnakesAndLadders.button("Snakes and Ladders", 150, 300, 200, 50, red, blue, SnakesAndLadders.gameLoop)
-        SnakesAndLadders.button("Tetris", 370, 300, 80, 50, red, blue, App.run)
-        SnakesAndLadders.button("Snake", 480, 300, 80, 50, red, blue, snake_LH_Git.main)
+        SnakesAndLadders.button("Hangman", 30, 300, 100, 50, red, blue, hangman.main)
+        SnakesAndLadders.button("Snakes and Ladders", 150, 300, 210, 50, red, blue, SnakesAndLadders.gameLoop)
+        SnakesAndLadders.button("Tetris", 380, 300, 100, 50, red, blue, App.run)
+        SnakesAndLadders.button("Snake", 500, 300, 100, 50, red, blue, snake_LH_Git.main)
 
         # print game preview Images
         screen.blit (Img_hangman, (45, 150))
