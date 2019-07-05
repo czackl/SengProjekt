@@ -2,6 +2,7 @@
 
 from random import randrange as rand
 import pygame, sys
+import gamemanager
 
 
 config = {
@@ -151,7 +152,7 @@ class TetrisApp(object):
 	def quit(self):
 		self.center_msg("...Spiel wird beendet...")
 		pygame.display.update()
-		sys.exit()
+		gamemanager.main()
 
 	def drop(self):
 		if not self.gameover and not self.paused:
@@ -224,6 +225,7 @@ class TetrisApp(object):
 					self.drop()
 				elif event.type == pygame.QUIT:
 					self.quit()
+
 				elif event.type == pygame.KEYDOWN:
 					for key in key_actions:
 						if event.key == eval("pygame.K_"
