@@ -38,7 +38,7 @@ words = ["SOFTWARE", "PROJEKT", "INFORMATIK", "BINGEN", "SEMESTERFERIEN",
 "TRIUMPHIEREN", "ZARTBESAITET", "VOLLPFOSTEN", "DRAHTESEL", "DOPPELGEMOPPELT",
 "DACHSCHADEN", "AKTENORDNER", "BLECHLAWINE", "DONNERWETTER", "DREHWURM",
 "DURSTSTRECKE", "EFFEKTHASCHEREI", "FEIERABEND", "FERNWEH", "FILMRISS",
-"GABELSTAPLER", "GEISTESBLITZ", "GEISTEFAHER", "GEWISSENSBISS", "HEIMWEH",
+"GABELSTAPLER", "GEISTESBLITZ", "GEISTERFAHER", "GEWISSENSBISS", "HEIMWEH",
 "HEISSHUNGER", "HEXENSCHUSS", "HOCHSTAPLER", "KLOBRILLE", "LAMPENFIEBER",
 "LEBENSZEIT", "LEITMOTIV", "MIESEPETER", "NARRENFREIHEIT", "OHNMACHT",
 "PUTZFIMMEL", "REISSWOLF", "FLEISCHWOLF", "SCHADENFREUDE", "SCHERZKEKS",
@@ -172,7 +172,7 @@ def print_dead_message():
 
 def print_won_message():
     """
-    When the user guessed all characters an is not already dead a won message is printed
+    When the user guessed all characters and is not already dead a won message is printed
     """
     #print won message
     pygame.time.wait(400)
