@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+
 
 from random import randrange as rand
 import pygame, sys
