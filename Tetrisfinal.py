@@ -24,7 +24,7 @@ farben = [						#Farben für Steine und Hintergrund
 (0,   220, 220)
 
 
-steine = [			#Formen der Steine
+tetris_shapes = [			#Formen der Steine
 	[[0, 0, 5],
 	 [5, 5, 5]],
 
