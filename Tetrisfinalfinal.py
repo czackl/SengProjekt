@@ -2,7 +2,7 @@
 
 from random import randrange as rand
 import pygame, sys
-import gamemanager
+#import gamemanager
 
 
 config = {						#Rahmenbedingungen für Tetris
@@ -22,7 +22,6 @@ farben = [						#Farben für Steine und Hintergrund
 (255, 0, 129),
 (180, 0,   255),
 (0,   220, 220)
-]
 
 
 steine = [			#Formen der Steine
@@ -138,6 +137,7 @@ class TetrisApp(object):
 							config['cell_size'],
 							config['cell_size']),0)
 
+
 	def bewegen(self, delta_x):
 		if not self.gameover and not self.paused:
 			new_x = self.stone_x + delta_x
@@ -152,7 +152,7 @@ class TetrisApp(object):
 	def beenden(self):			#escape fuehrt zum gamemanager
 		self.center_msg("...Spiel wird beendet...")
 		pygame.display.update()
-		gamemanager.main()
+		#gamemanager.main()
 
 	def fastdrop(self):			#Stein schneller als normal fallen lassen
 		if not self.gameover and not self.paused:
