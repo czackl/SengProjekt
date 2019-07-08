@@ -2,7 +2,7 @@
 
 from random import randrange as rand
 import pygame, sys
-#import gamemanager
+import gamemanager
 
 
 config = {						#Rahmenbedingungen für Tetris
@@ -152,7 +152,7 @@ class TetrisApp(object):
 	def beenden(self):			#escape fuehrt zum gamemanager
 		self.zentrierung("...Spiel wird beendet...")
 		pygame.display.update()
-		#gamemanager.main()
+		gamemanager.main()
 
 	def fastdrop(self):			#Stein schneller als normal fallen lassen
 		if not self.gameover and not self.paused:
