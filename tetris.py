@@ -1,4 +1,4 @@
-!/usr/bin/env python
+
 from random import randrange as random
 import pygame, sys
 
@@ -10,7 +10,7 @@ config = {
             'maxfps':       60,
 }
 
-colours = [
+farben = [
 (0, 0,  0),
 (255,   0,  0),
 (0, 150,    0),
@@ -43,12 +43,12 @@ tetris_shapes = [
      [7,7]]
 ]
 
-def rotate_clockwise(shape):
+def drehen(shape):
         return[[shape[y][x]
                 for y in xrange(len(shape))]
             for x in xrange(len(shape[0])-1, -1,-1)]
 
-def check_collision(board, shape, offset):
+def collision(board, shape, offset):
     off_x, off_y = offset
     for cy, row in enumerate(shape):
         for cx, cell in enumerate(row):
@@ -59,6 +59,6 @@ def check_collision(board, shape, offset):
                         return True
             return False
 
-def remove_row(board, row):
+def löschen(board, row):
     del board[row]
     return [[0 for i in xrange(config['cols'])]] + board
