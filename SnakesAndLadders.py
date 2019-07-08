@@ -113,7 +113,7 @@ def win(pT, color):
 
 def playerText(pT, color):
     """
-    Method wich blit the Player who is next.
+    Method that blit the Player who is next.
     pT = wich player text
     color = wich color
     """
@@ -124,7 +124,7 @@ def playerText(pT, color):
 
 def turnText():
     """
-    Method wich blit the "it´s your turn" text.
+    Method that blit the "it´s your turn" text.
     """
     turnText = pygame.font.SysFont("comicsansms",30)
     textSurf, textRect = textObjects("it´s your turn", turnText, black)
@@ -133,7 +133,7 @@ def turnText():
 
 def biteText():
     """
-    Text method wich is blitted if a player is at a position of a snake.
+    Text method that is blitted if a player is at a position of a snake.
     """
     biteText = pygame.font.SysFont("comicsansms",22)
     textSurf, textRect = textObjects("A snake bites you!", biteText, brightRed)
@@ -142,7 +142,7 @@ def biteText():
 
 def ladderText():
     """
-    Text Methode wich is blitted if a Player is at a position of a ladder.
+    Text Methode that is blitted if a Player is at a position of a ladder.
     """
     ladderText = pygame.font.SysFont("comicsansms",22)
     textSurf, textRect = textObjects("There´s a ladder!", ladderText, brightRed)
