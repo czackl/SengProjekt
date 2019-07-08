@@ -108,7 +108,7 @@ class TetrisApp(object):
 		self.board = new_board()
 		self.new_stone()
 
-	def center_msg(self, msg):
+	def zentrierung(self, msg):
 		for i, line in enumerate(msg.splitlines()):
 			msg_image =  pygame.font.Font(
 				pygame.font.get_default_font(), 12).render(
