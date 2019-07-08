@@ -10,7 +10,7 @@ config = {
             'maxfps':       60,
 }
 
-colours = [
+farben = [
 (0, 0,  0),
 (255,   0,  0),
 (0, 150,    0),
@@ -21,7 +21,7 @@ colours = [
 (0, 220,    220),
 ]
 
-tetris_shapes = [
+formen = [
     [[1,1,1],
      [0,1,0]],
 
@@ -43,12 +43,13 @@ tetris_shapes = [
      [7,7]]
 ]
 
-def rotate_clockwise(shape):
-        return[[shape[y][x]
+def drehen(shape):
+        return
+[[shape[y][x]
                 for y in xrange(len(shape))]
             for x in xrange(len(shape[0])-1, -1,-1)]
 
-def check_collision(board, shape, offset):
+def collision(board, shape, offset):
     off_x, off_y = offset
     for cy, row in enumerate(shape):
         for cx, cell in enumerate(row):
@@ -70,10 +71,44 @@ def join_matrixes(mat1, mat2, mat2_off):
             mat1[cy+off_y-1][cx+off_x] +=val
     retrun mat1
 
-def new_board():
+def neues_Feld():
     board = [ [ 0 for x in xrange(config['cols'])]
                     for y in xrange(config['rows']) ]
     board += [[ 1 for x in xrange(config['cols'])]]
     return board
 
 class TetrisApp(object):
+            def_init_(self):
+                pygame.init()
+                pygame.key.set_repeat(250,25)
+                self.width = config['cell_size']*config['cols']
+                self.height = config['cell_size']*config['rows']
+
+                self.screen = pygame.display.set_mode((self.width, self.height))
+                pygame.event.set_blocked(pygame.MOUSEMOTION)
+
+
+                self.init_game()
+
+            def neue_steine(self):
+
+                self.stone = tetris_shapes[rand(len(tetris_shapes))]
+                self.stone_x = int(config['cols'] / 2 - len(self.stone[0])/2)
+                self.stone_y = 0
+
+                if check_collision(self.board,
+                                    self.stone,
+                                    (self.stone_x, self.stone_y)):
+                         self.gameover = True
+
+            def init_game(self):
+                self.board = new_board()
+                self.new_stone()
+
+            def center_msg(self, msg):
+                for i, line in enumerate(msg.splitlines()):
+                    msg_image = pygame.font.Font(
+                            pygame.font.get_default_font(), 12).render(
+                                    line, False, (255,255,255), (0,0)
+                            )
+                    )
