@@ -1,11 +1,11 @@
 
 
 from random import randrange as rand
-import pygame, sys
+import pygame, sys				
 import gamemanager
 
 
-config = {
+config = {						#Rahmenbedingungen für Tetris
 	'cell_size':	20,
 	'cols':		8,
 	'rows':		16,
@@ -13,7 +13,7 @@ config = {
 	'maxfps':	30
 }
 
-colors = [
+colors = [						#Farben für Steine und Hintergrund
 (0,   0,   0),
 (247, 255,   0),
 (42, 255, 56),
@@ -25,7 +25,7 @@ colors = [
 ]
 
 
-tetris_shapes = [
+tetris_shapes = [			#Formen der Steine
 	[[1, 1, 1],
 	 [0, 1, 0]],
 
@@ -47,12 +47,12 @@ tetris_shapes = [
 	 [7, 7]]
 ]
 
-def rotate_clockwise(shape):
+def rotate(shape):
 	return [ [ shape[y][x]
 			for y in range(len(shape)) ]
 		for x in range(len(shape[0]) - 1, -1, -1) ]
 
-def check_collision(board, shape, offset):
+def collision(board, shape, offset):			#steine stapeln
 	off_x, off_y = offset
 	for cy, row in enumerate(shape):
 		for cx, cell in enumerate(row):
@@ -63,7 +63,7 @@ def check_collision(board, shape, offset):
 				return True
 	return False
 
-def remove_row(board, row):
+def remove_zeile(board, row):				#wenn eine Reihe vollständig ist, wird sie entfernt
 	del board[row]
 	return [[0 for i in range(config['cols'])]] + board
 
@@ -94,7 +94,7 @@ class TetrisApp(object):
 
 		self.init_game()
 
-	def new_stone(self):
+	def neuer_Stein(self):					#neue steine generieren
 		self.stone = tetris_shapes[rand(len(tetris_shapes))]
 		self.stone_x = int(config['cols'] / 2 - len(self.stone[0])/2)
 		self.stone_y = 0
@@ -138,7 +138,7 @@ class TetrisApp(object):
 							config['cell_size'],
 							config['cell_size']),0)
 
-	def move(self, delta_x):
+	def bewegen(self, delta_x):
 		if not self.gameover and not self.paused:
 			new_x = self.stone_x + delta_x
 			if new_x < 0:
@@ -149,12 +149,12 @@ class TetrisApp(object):
 			                       self.stone,
 			                       (new_x, self.stone_y)):
 				self.stone_x = new_x
-	def quit(self):
+	def beenden(self):			#escape fuehrt zum gamemanager
 		self.center_msg("...Spiel wird beendet...")
 		pygame.display.update()
 		gamemanager.main()
 
-	def drop(self):
+	def fastdrop(self):			#Stein schneller als normal fallen lassen
 		if not self.gameover and not self.paused:
 			self.stone_y += 1
 			if check_collision(self.board,
@@ -174,7 +174,7 @@ class TetrisApp(object):
 					else:
 						break
 
-	def rotate_stone(self):
+	def rotate_stein(self):			#stein kann gedreht werden
 		if not self.gameover and not self.paused:
 			new_stone = rotate_clockwise(self.stone)
 			if not check_collision(self.board,
@@ -194,7 +194,7 @@ class TetrisApp(object):
 		self.screen = pygame.display.set_mode((self.width, self.height))
 		pygame.display.update()
 
-		key_actions = {
+		Steuerung = {				#die steuerung
 			'ESCAPE':	self.quit,
 			'LEFT':		lambda:self.move(-1),
 			'RIGHT':	lambda:self.move(+1),
@@ -223,7 +223,7 @@ class TetrisApp(object):
 					                  self.stone_y))
 			pygame.display.update()
 
-			for event in pygame.event.get():
+			for event in pygame.event.get():		#die interaktionsmoeglichkeiten die der spieler hat
 				if event.type == pygame.USEREVENT+1:
 					self.drop()
 				elif event.type == pygame.QUIT:
