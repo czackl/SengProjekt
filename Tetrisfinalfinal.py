@@ -9,7 +9,7 @@ config = {						#Rahmenbedingungen für Tetris
 	'cell_size':	20,
 	'cols':		13,
 	'rows':		20,
-	'delay':	750,
+	'delay':	800,
 	'maxfps':	120
 }
 
@@ -26,8 +26,8 @@ farben = [						#Farben für Steine und Hintergrund
 
 
 steine = [			#Formen der Steine
-	[[1, 1, 1],
-	 [0, 1, 0]],
+	[[0, 0, 5],
+	 [5, 5, 5]],
 
 	[[0, 2, 2],
 	 [2, 2, 0]],
@@ -38,8 +38,8 @@ steine = [			#Formen der Steine
 	[[4, 0, 0],
 	 [4, 4, 4]],
 
-	[[0, 0, 5],
-	 [5, 5, 5]],
+	[[1, 1, 1],
+	 [0, 1, 0]],
 
 	[[6, 6, 6, 6]],
 
