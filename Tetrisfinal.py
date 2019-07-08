@@ -22,9 +22,9 @@ farben = [						#Farben für Steine und Hintergrund
 (255, 0, 129),
 (180, 0,   255),
 (0,   220, 220)
+]
 
-
-tetris_shapes = [			#Formen der Steine
+tetris_shapes = [					#Formen der Steine
 	[[0, 0, 5],
 	 [5, 5, 5]],
 
@@ -98,14 +98,14 @@ class TetrisApp(object):
 		self.stone_x = int(config['cols'] / 2 - len(self.stone[0])/2)
 		self.stone_y = 0
 
-		if check_collision(self.board,
+		if collision(self.board,
 		                   self.stone,
 		                   (self.stone_x, self.stone_y)):
 			self.gameover = True
 
 	def init_game(self):
-		self.board = new_board()
-		self.new_stone()
+		self.board = neues_Spielfeld()
+		self.neuer_Stein()
 
 	def zentrierung(self, msg):
 		for i, line in enumerate(msg.splitlines()):
@@ -128,7 +128,7 @@ class TetrisApp(object):
 				if val:
 					pygame.draw.rect(
 						self.screen,
-						colors[val],
+						farben[val],
 						pygame.Rect(
 							(off_x+x) *
 							  config['cell_size'],
@@ -145,30 +145,30 @@ class TetrisApp(object):
 				new_x = 0
 			if new_x > config['cols'] - len(self.stone[0]):
 				new_x = config['cols'] - len(self.stone[0])
-			if not check_collision(self.board,
+			if not collision(self.board,
 			                       self.stone,
 			                       (new_x, self.stone_y)):
 				self.stone_x = new_x
 	def beenden(self):			#escape fuehrt zum gamemanager
-		self.center_msg("...Spiel wird beendet...")
+		self.zentrierung("...Spiel wird beendet...")
 		pygame.display.update()
 		#gamemanager.main()
 
 	def fastdrop(self):			#Stein schneller als normal fallen lassen
 		if not self.gameover and not self.paused:
 			self.stone_y += 1
-			if check_collision(self.board,
+			if collision(self.board,
 			                   self.stone,
 			                   (self.stone_x, self.stone_y)):
 				self.board = join_matrixes(
 				  self.board,
 				  self.stone,
 				  (self.stone_x, self.stone_y))
-				self.new_stone()
+				self.neuer_Stein()
 				while True:
 					for i, row in enumerate(self.board[:-1]):
 						if 0 not in row:
-							self.board = remove_row(
+							self.board = remove_zeile(
 							  self.board, i)
 							break
 					else:
@@ -176,8 +176,8 @@ class TetrisApp(object):
 
 	def rotate_stein(self):			#stein kann gedreht werden
 		if not self.gameover and not self.paused:
-			new_stone = rotate_clockwise(self.stone)
-			if not check_collision(self.board,
+			new_stone = drehen(self.stone)
+			if not collision(self.board,
 			                       new_stone,
 			                       (self.stone_x, self.stone_y)):
 				self.stone = new_stone
@@ -195,11 +195,11 @@ class TetrisApp(object):
 		pygame.display.update()
 
 		Steuerung = {				#die steuerung
-			'ESCAPE':	self.quit,
-			'LEFT':		lambda:self.move(-1),
-			'RIGHT':	lambda:self.move(+1),
-			'DOWN':		self.drop,
-			'UP':		self.rotate_stone,
+			'ESCAPE':	self.beenden,
+			'LEFT':		lambda:self.bewegen(-1),
+			'RIGHT':	lambda:self.bewegen(+1),
+			'DOWN':		self.fastdrop,
+			'UP':		self.rotate_stein,
 			'p':		self.toggle_pause,
 			'SPACE':	self.start_game
 		}
@@ -212,10 +212,10 @@ class TetrisApp(object):
 		while 1:
 			self.screen.fill((0,0,0))
 			if self.gameover:
-				self.center_msg("Gameover :( Zum fortsetzen bitte die 'Space'-Taste druecken")
+				self.zentrierung("Gameover :( Zum fortsetzen bitte die 'Space'-Taste druecken")
 			else:
 				if self.paused:
-					self.center_msg("*Pause*")
+					self.zentrierung("*Pause*")
 				else:
 					self.draw_matrix(self.board, (0,0))
 					self.draw_matrix(self.stone,
@@ -225,18 +225,18 @@ class TetrisApp(object):
 
 			for event in pygame.event.get():		#die interaktionsmoeglichkeiten die der spieler hat
 				if event.type == pygame.USEREVENT+1:
-					self.drop()
+					self.fastdrop()
 				elif event.type == pygame.QUIT:
-					self.quit()
+					self.beenden()
 
 				elif event.type == pygame.KEYDOWN:
-					for key in key_actions:
+					for key in Steuerung:
 						if event.key == eval("pygame.K_"
 						+key):
-							key_actions[key]()
+							Steuerung[key]()
 
 			clock.tick(config['maxfps'])
 
 if __name__ == '__main__':
-	App = Tetris()
+	App = TetrisApp()
 	App.run()
