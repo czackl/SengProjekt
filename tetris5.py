@@ -1,4 +1,4 @@
-!/usr/bin/env python
+
 from random import randrange as random
 import pygame, sys
 
@@ -10,7 +10,7 @@ config = {
             'maxfps':       60,
 }
 
-colours = [
+farben = [
 (0, 0,  0),
 (255,   0,  0),
 (0, 150,    0),
@@ -21,7 +21,7 @@ colours = [
 (0, 220,    220),
 ]
 
-tetris_shapes = [
+tetris_steine = [
     [[1,1,1],
      [0,1,0]],
 
@@ -43,12 +43,12 @@ tetris_shapes = [
      [7,7]]
 ]
 
-def rotate_clockwise(shape):
+def drehen(shape):
         return[[shape[y][x]
                 for y in xrange(len(shape))]
             for x in xrange(len(shape[0])-1, -1,-1)]
 
-def check_collision(board, shape, offset):
+def collision(board, shape, offset):
     off_x, off_y = offset
     for cy, row in enumerate(shape):
         for cx, cell in enumerate(row):
@@ -59,7 +59,7 @@ def check_collision(board, shape, offset):
                         return True
             return False
 
-def remove_row(board, row):
+def remove_zeile(board, row):
     del board[row]
     return [[0 for i in xrange(config['cols'])]] + board
 
@@ -70,7 +70,7 @@ def join_matrixes(mat1, mat2, mat2_off):
             mat1[cy+off_y-1][cx+off_x] +=val
     retrun mat1
 
-def new_board():
+def neues_Spielfeld():
     board = [ [ 0 for x in xrange(config['cols'])]
                     for y in xrange(config['rows']) ]
     board += [[ 1 for x in xrange(config['cols'])]]
@@ -103,7 +103,7 @@ class TetrisApp(object):
                 self.board = new_board()
                 self.new_stone()
 
-            def center_msg(self, msg):
+            def zentrierung(self, msg):
                 for i, line in enumerate(msg.splitlines()):
                     msg_image = pygame.font.Font(
                             pygame.font.get_default_font(), 12).render(
