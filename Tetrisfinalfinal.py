@@ -238,5 +238,5 @@ class TetrisApp(object):
 			clock.tick(config['maxfps'])
 
 if __name__ == '__main__':
-	App = TetrisApp()
+	App = Tetris()
 	App.run()
