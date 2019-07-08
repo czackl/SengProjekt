@@ -9,7 +9,7 @@
 <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>SnakesAndLadders</strong></big></big></font></td
 ><td align=right valign=bottom
 ><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:c%3A%5Cusers%5Cconst%5Cgithub%5Csengprojekt%5Csnakesandladders.py">c:\users\const\github\sengprojekt\snakesandladders.py</a></font></td></tr></table>
-    <p><tt>#import&nbsp;moduls,&nbsp;gamemanager</tt></p>
+    <p><tt>Skript&nbsp;for&nbsp;the&nbsp;Snakes&nbsp;and&nbsp;Ladders&nbsp;game</tt></p>
 <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#aa55cc">
@@ -27,22 +27,49 @@
 <font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
     
 <tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><dl><dt><a name="-background"><strong>background</strong></a>()</dt></dl>
- <dl><dt><a name="-biteText"><strong>biteText</strong></a>()</dt></dl>
- <dl><dt><a name="-button"><strong>button</strong></a>(text, x, y, w, h, mouseOn, mouseOff, action=None)</dt></dl>
- <dl><dt><a name="-gameLoop"><strong>gameLoop</strong></a>()</dt></dl>
- <dl><dt><a name="-ladderText"><strong>ladderText</strong></a>()</dt></dl>
- <dl><dt><a name="-ladders"><strong>ladders</strong></a>(playerPosition)</dt></dl>
- <dl><dt><a name="-movePlayer"><strong>movePlayer</strong></a>(playerPosition)</dt></dl>
- <dl><dt><a name="-playerText"><strong>playerText</strong></a>(pT, color)</dt></dl>
- <dl><dt><a name="-quitGame"><strong>quitGame</strong></a>()</dt></dl>
- <dl><dt><a name="-resetGame"><strong>resetGame</strong></a>()</dt></dl>
- <dl><dt><a name="-reset_diplay"><strong>reset_diplay</strong></a>()</dt></dl>
- <dl><dt><a name="-rollDice"><strong>rollDice</strong></a>()</dt></dl>
- <dl><dt><a name="-snakes"><strong>snakes</strong></a>(playerPosition)</dt></dl>
- <dl><dt><a name="-textObjects"><strong>textObjects</strong></a>(text, font, color)</dt></dl>
- <dl><dt><a name="-turnText"><strong>turnText</strong></a>()</dt></dl>
- <dl><dt><a name="-win"><strong>win</strong></a>(pT, color)</dt></dl>
+<td width="100%"><dl><dt><a name="-background"><strong>background</strong></a>()</dt><dd><tt>Methode&nbsp;to&nbsp;blit&nbsp;the&nbsp;background&nbsp;image.</tt></dd></dl>
+ <dl><dt><a name="-biteText"><strong>biteText</strong></a>()</dt><dd><tt>Text&nbsp;method&nbsp;that&nbsp;is&nbsp;blitted&nbsp;if&nbsp;a&nbsp;player&nbsp;is&nbsp;at&nbsp;a&nbsp;position&nbsp;of&nbsp;a&nbsp;snake.</tt></dd></dl>
+ <dl><dt><a name="-button"><strong>button</strong></a>(text, x, y, w, h, mouseOn, mouseOff, action=None)</dt><dd><tt>Method&nbsp;implementing&nbsp;a&nbsp;Button&nbsp;which&nbsp;can&nbsp;be&nbsp;arranged&nbsp;in&nbsp;an&nbsp;pygame&nbsp;window<br>
+Usage:&nbsp;button&nbsp;(text,&nbsp;x,&nbsp;y,&nbsp;w,&nbsp;h,&nbsp;mouseOn,&nbsp;mouseOff,&nbsp;action)<br>
+text:&nbsp;text&nbsp;to&nbsp;be&nbsp;displayed&nbsp;by&nbsp;the&nbsp;button<br>
+x:&nbsp;top&nbsp;left&nbsp;x&nbsp;coordinate<br>
+y:&nbsp;top&nbsp;left&nbsp;y&nbsp;coordinate<br>
+w:&nbsp;width&nbsp;of&nbsp;the&nbsp;button<br>
+h:&nbsp;heigth&nbsp;of&nbsp;the&nbsp;button<br>
+mouseOn:&nbsp;color&nbsp;when&nbsp;hovering&nbsp;the&nbsp;button&nbsp;with&nbsp;the&nbsp;cursor<br>
+mouseOff:&nbsp;standart&nbsp;button&nbsp;colors<br>
+action:&nbsp;method&nbsp;called&nbsp;when&nbsp;pressed,&nbsp;method&nbsp;name&nbsp;without&nbsp;parenthesis</tt></dd></dl>
+ <dl><dt><a name="-diceText"><strong>diceText</strong></a>()</dt><dd><tt>Method&nbsp;used&nbsp;to&nbsp;show&nbsp;the&nbsp;player&nbsp;wich&nbsp;number&nbsp;he&nbsp;rolled&nbsp;with&nbsp;the&nbsp;dice.</tt></dd></dl>
+ <dl><dt><a name="-gameLoop"><strong>gameLoop</strong></a>()</dt><dd><tt>Main&nbsp;method&nbsp;for&nbsp;calling&nbsp;the&nbsp;game.&nbsp;Using&nbsp;all&nbsp;methods&nbsp;and&nbsp;set&nbsp;the&nbsp;frames<br>
+per&nbsp;second&nbsp;to&nbsp;30.&nbsp;The&nbsp;method&nbsp;also&nbsp;init&nbsp;the&nbsp;Event-Queue.</tt></dd></dl>
+ <dl><dt><a name="-ladderText"><strong>ladderText</strong></a>()</dt><dd><tt>Text&nbsp;Methode&nbsp;that&nbsp;is&nbsp;blitted&nbsp;if&nbsp;a&nbsp;Player&nbsp;is&nbsp;at&nbsp;a&nbsp;position&nbsp;of&nbsp;a&nbsp;ladder.</tt></dd></dl>
+ <dl><dt><a name="-ladders"><strong>ladders</strong></a>(playerPosition)</dt><dd><tt>Method&nbsp;has&nbsp;a&nbsp;"switch&nbsp;case"&nbsp;for&nbsp;positions&nbsp;of&nbsp;ladders.<br>
+If&nbsp;position&nbsp;switch&nbsp;this&nbsp;methode&nbsp;print&nbsp;the&nbsp;ladder&nbsp;text&nbsp;and&nbsp;draw&nbsp;the<br>
+token&nbsp;at&nbsp;the&nbsp;new&nbsp;position.&nbsp;Also&nbsp;return&nbsp;the&nbsp;new&nbsp;position.</tt></dd></dl>
+ <dl><dt><a name="-movePlayer"><strong>movePlayer</strong></a>(playerPosition)</dt><dd><tt>Calculate&nbsp;the&nbsp;new&nbsp;Position&nbsp;for&nbsp;token&nbsp;and&nbsp;return&nbsp;it.</tt></dd></dl>
+ <dl><dt><a name="-playerText"><strong>playerText</strong></a>(pT, color)</dt><dd><tt>Method&nbsp;that&nbsp;blit&nbsp;the&nbsp;Player&nbsp;who&nbsp;is&nbsp;next.<br>
+pT&nbsp;=&nbsp;wich&nbsp;player&nbsp;text<br>
+color&nbsp;=&nbsp;wich&nbsp;color</tt></dd></dl>
+ <dl><dt><a name="-quitGame"><strong>quitGame</strong></a>()</dt><dd><tt>When&nbsp;player&nbsp;wants&nbsp;to&nbsp;quit&nbsp;the&nbsp;Snakes&nbsp;and&nbsp;Ladders&nbsp;Game&nbsp;this&nbsp;methode&nbsp;used<br>
+to&nbsp;jump&nbsp;in&nbsp;the&nbsp;Gamemanager&nbsp;Main&nbsp;and&nbsp;post&nbsp;a&nbsp;QUIT-Event&nbsp;in&nbsp;the&nbsp;Event-Queue<br>
+to&nbsp;quit&nbsp;the&nbsp;Snakes&nbsp;and&nbsp;Ladders&nbsp;game.</tt></dd></dl>
+ <dl><dt><a name="-resetGame"><strong>resetGame</strong></a>()</dt><dd><tt>Methode&nbsp;used&nbsp;for&nbsp;resetting&nbsp;all&nbsp;game&nbsp;variables,&nbsp;used&nbsp;when&nbsp;player&nbsp;wants&nbsp;to<br>
+play&nbsp;a&nbsp;new&nbsp;game.</tt></dd></dl>
+ <dl><dt><a name="-reset_diplay"><strong>reset_diplay</strong></a>()</dt><dd><tt>Reset&nbsp;the&nbsp;display&nbsp;size&nbsp;used&nbsp;used&nbsp;if&nbsp;player&nbsp;changes&nbsp;from&nbsp;gamemanager&nbsp;to<br>
+Snakes&nbsp;and&nbsp;Ladders&nbsp;Game.</tt></dd></dl>
+ <dl><dt><a name="-rollDice"><strong>rollDice</strong></a>()</dt><dd><tt>Method&nbsp;used&nbsp;to&nbsp;create&nbsp;a&nbsp;random&nbsp;integer&nbsp;between&nbsp;1&nbsp;and&nbsp;6&nbsp;and&nbsp;return&nbsp;it.<br>
+If&nbsp;player&nbsp;roll&nbsp;the&nbsp;dice&nbsp;the&nbsp;boolean&nbsp;"move"&nbsp;get&nbsp;TRUE.<br>
+The&nbsp;boolean&nbsp;"turn"&nbsp;switch&nbsp;from&nbsp;FALSE&nbsp;to&nbsp;TRUE.</tt></dd></dl>
+ <dl><dt><a name="-snakes"><strong>snakes</strong></a>(playerPosition)</dt><dd><tt>Method&nbsp;has&nbsp;a&nbsp;"switch&nbsp;case"&nbsp;for&nbsp;positions&nbsp;of&nbsp;snakes.<br>
+If&nbsp;position&nbsp;switch&nbsp;this&nbsp;method&nbsp;print&nbsp;the&nbsp;bite&nbsp;text&nbsp;and&nbsp;draw&nbsp;the<br>
+token&nbsp;at&nbsp;the&nbsp;new&nbsp;position.&nbsp;Also&nbsp;return&nbsp;the&nbsp;new&nbsp;position.</tt></dd></dl>
+ <dl><dt><a name="-textObjects"><strong>textObjects</strong></a>(text, font, color)</dt><dd><tt>Method&nbsp;used&nbsp;for&nbsp;creating&nbsp;Text&nbsp;Objects.<br>
+text&nbsp;=&nbsp;text<br>
+font&nbsp;=&nbsp;font<br>
+color&nbsp;=&nbsp;color</tt></dd></dl>
+ <dl><dt><a name="-turnText"><strong>turnText</strong></a>()</dt><dd><tt>Method&nbsp;that&nbsp;blit&nbsp;the&nbsp;"it´s&nbsp;your&nbsp;turn"&nbsp;text.</tt></dd></dl>
+ <dl><dt><a name="-win"><strong>win</strong></a>(pT, color)</dt><dd><tt>This&nbsp;Method&nbsp;fill&nbsp;the&nbsp;hole&nbsp;screen&nbsp;with&nbsp;one&nbsp;color&nbsp;and&nbsp;blit&nbsp;wich&nbsp;Player<br>
+has&nbsp;won.</tt></dd></dl>
 </td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#55aa55">
