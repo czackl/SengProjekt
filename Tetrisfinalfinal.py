@@ -1,19 +1,19 @@
 
 
 from random import randrange as rand
-import pygame, sys				
+import pygame, sys
 import gamemanager
 
 
 config = {						#Rahmenbedingungen für Tetris
 	'cell_size':	20,
-	'cols':		8,
-	'rows':		16,
+	'cols':		13,
+	'rows':		20,
 	'delay':	750,
-	'maxfps':	30
+	'maxfps':	120
 }
 
-colors = [						#Farben für Steine und Hintergrund
+farben = [						#Farben für Steine und Hintergrund
 (0,   0,   0),
 (247, 255,   0),
 (42, 255, 56),
@@ -25,7 +25,7 @@ colors = [						#Farben für Steine und Hintergrund
 ]
 
 
-tetris_shapes = [			#Formen der Steine
+steine = [			#Formen der Steine
 	[[1, 1, 1],
 	 [0, 1, 0]],
 
@@ -47,7 +47,7 @@ tetris_shapes = [			#Formen der Steine
 	 [7, 7]]
 ]
 
-def rotate(shape):
+def drehen(shape):
 	return [ [ shape[y][x]
 			for y in range(len(shape)) ]
 		for x in range(len(shape[0]) - 1, -1, -1) ]
@@ -74,7 +74,7 @@ def join_matrixes(mat1, mat2, mat2_off):
 			mat1[cy+off_y-1	][cx+off_x] += val
 	return mat1
 
-def new_board():
+def neues_Spielfeld():
 	board = [ [ 0 for x in range(config['cols']) ]
 			for y in range(config['rows']) ]
 	board += [[ 1 for x in range(config['cols'])]]
