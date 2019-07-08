@@ -1,10 +1,14 @@
+#SnakesAndLadders
+"""
+Skript for the Snakes and Ladders game
+"""
 #import moduls, gamemanager
 import pygame, random, gamemanager
 
 #init pygame
 pygame.init()
 
-#define pitch, screen size
+#define pitch/screen size
 sizePitch = width, height = 600, 400
 sizeScreen = width, height = 800, 400
 
@@ -20,7 +24,7 @@ brightRed = 255,0,0
 brightGreen = 0,255,0
 brightBlue = 0,0,255
 
-#define token radius
+#define token radius/diceNum
 srad = 15
 diceNum = 0
 
@@ -34,6 +38,7 @@ ladder = False
 player1Text = "Player1"
 player2Text = "Player2"
 
+#set screen to right size/ display caption, define clock
 screen = pygame.display.set_mode(sizeScreen)
 pygame.display.set_caption('Snakes & Ladders')
 clock = pygame.time.Clock()
@@ -43,16 +48,25 @@ bg = pygame.image.load("bg.jpg")
 bg = pygame.transform.scale(bg,sizePitch)
 
 def quitGame():
-    #run gamemanager, post QUIT-event in Pygames Event-Queue
+    """
+    When player wants to quit the Snakes and Ladders Game this methode used
+    to jump in the Gamemanager Main and post a QUIT-Event in the Event-Queue
+    to quit the Snakes and Ladders game.
+    """
     gamemanager.main()
     pygame.event.post(pygame.event.Event(pygame.QUIT))
 
 def background():
-    #blit background image
+    """
+    Methode to blit the background image.
+    """
     screen.blit(bg,(0,0))
 
 def resetGame():
-    #reset all valuables
+    """
+    Methode used for resetting all game variables, used when player wants to
+    play a new game.
+    """
     global diceNum, xStart, yStart, xNew, yNew, xMax, xMin, xOv, move, turn, player1Position, player2Position
 
     xStart = 30
@@ -68,10 +82,20 @@ def resetGame():
     turn = False
 
 def textObjects(text, font, color):
+    """
+    Method used for creating Text Objects.
+    text = text
+    font = font
+    color = color
+    """
     textSurface = font.render(text, True, color)
     return textSurface, textSurface.get_rect()
 
 def win(pT, color):
+    """
+    This Method fill the hole screen with one color and blit wich Player
+    has won.
+    """
     pygame.time.wait(400)
     screen.fill(oliveGreen)
     playerWinText = pygame.font.SysFont("comicsansms",50)
@@ -88,30 +112,56 @@ def win(pT, color):
     gamemanager.main()
 
 def playerText(pT, color):
+    """
+    Method wich blit the Player who is next.
+    pT = wich player text
+    color = wich color
+    """
     playerText = pygame.font.SysFont("comicsansms",30)
     textSurf, textRect = textObjects(pT, playerText, color)
     textRect.center = ((700),(150))
     screen.blit(textSurf, textRect)
 
 def turnText():
+    """
+    Method wich blit the "it´s your turn" text.
+    """
     turnText = pygame.font.SysFont("comicsansms",30)
     textSurf, textRect = textObjects("it´s your turn", turnText, black)
     textRect.center = ((700),(200))
     screen.blit(textSurf, textRect)
 
 def biteText():
+    """
+    Text method wich is blitted if a player is at a position of a snake.
+    """
     biteText = pygame.font.SysFont("comicsansms",22)
     textSurf, textRect = textObjects("A snake bites you!", biteText, brightRed)
     textRect.center = ((700),(80))
     screen.blit(textSurf, textRect)
 
 def ladderText():
+    """
+    Text Methode wich is blitted if a Player is at a position of a ladder.
+    """
     ladderText = pygame.font.SysFont("comicsansms",22)
     textSurf, textRect = textObjects("There´s a ladder!", ladderText, brightRed)
     textRect.center = ((700),(100))
     screen.blit(textSurf, textRect)
 
 def button(text,x,y,w,h,mouseOn,mouseOff,action=None):
+    """
+    Method implementing a Button which can be arranged in an pygame window
+    Usage: button (text, x, y, w, h, mouseOn, mouseOff, action)
+    text: text to be displayed by the button
+    x: top left x coordinate
+    y: top left y coordinate
+    w: width of the button
+    h: heigth of the button
+    mouseOn: color when hovering the button with the cursor
+    mouseOff: standart button colors
+    action: method called when pressed, method name without parenthesis
+    """
     mouse = pygame.mouse.get_pos()
     click = pygame.mouse.get_pressed()
 
@@ -129,6 +179,11 @@ def button(text,x,y,w,h,mouseOn,mouseOff,action=None):
     screen.blit(textSurf, textRect)
 
 def rollDice():
+    """
+    Method used to create a random integer between 1 and 6 and return it.
+    If player roll the dice the boolean "move" get TRUE.
+    The boolean "turn" switch from FALSE to TRUE.
+    """
     global diceNum, turn, move
 
     diceNum = random.randint(1,6)
@@ -143,7 +198,22 @@ def rollDice():
 
     return diceNum
 
+def diceText():
+    """
+    Method used to show the player wich number he rolled with the dice.
+    """
+    if diceNum != 0:
+        diceText = pygame.font.SysFont("comicsansms",24)
+        textSurf, textRect = textObjects(str(diceNum), diceText, black)
+        textRect.center = ( (700), (325) )
+        screen.blit(textSurf, textRect)
+
+
 def reset_diplay():
+    """
+    Reset the display size used used if player changes from gamemanager to
+    Snakes and Ladders Game.
+    """
     screen = pygame.display.set_mode(sizeScreen)
     pygame.display.set_caption('Snakes & Ladders')
 
@@ -158,6 +228,9 @@ player1Position = (xStart, yStart)
 player2Position = (xStart, yStart)
 
 def movePlayer(playerPosition):
+    """
+    Calculate the new Position for token and return it.
+    """
     global diceNum, xStart, yStart, xNew, yNew, xMax, xMin, xOv
 
     xOld = playerPosition[0]
@@ -191,6 +264,11 @@ def movePlayer(playerPosition):
     return playerPosition
 
 def snakes(playerPosition):
+    """
+    Method has a "switch case" for positions of snakes.
+    If position switch this method print the bite text and draw the
+    token at the new position. Also return the new position.
+    """
     switchSnakes = {
         (450 , 380): (210 , 380),
         (150 , 340): (30, 380),
@@ -213,11 +291,16 @@ def snakes(playerPosition):
         pygame.draw.circle(screen, lawnGreen, player1Position, srad, 0)
         pygame.draw.circle(screen, marineBlue, player2Position, srad, 0)
         pygame.display.update()
-        pygame.time.wait(3000)
+        pygame.time.wait(2500)
 
     return switchSnakes.get(playerPosition, playerPosition)
 
 def ladders(playerPosition):
+    """
+    Method has a "switch case" for positions of ladders.
+    If position switch this methode print the ladder text and draw the
+    token at the new position. Also return the new position.
+    """
     switchLadders = {
         (150, 380): (30, 340),
         (330, 380): (390, 340),
@@ -238,11 +321,15 @@ def ladders(playerPosition):
         pygame.draw.circle(screen, lawnGreen, player1Position, srad, 0)
         pygame.draw.circle(screen, marineBlue, player2Position, srad, 0)
         pygame.display.update()
-        pygame.time.wait(3000)
+        pygame.time.wait(2500)
 
     return switchLadders.get(playerPosition, playerPosition)
 
 def gameLoop():
+    """
+    Main method for calling the game. Using all methods and set the frames
+    per second to 30. The method also init the Event-Queue.
+    """
     global move, turn, player1Position, player2Position
 
     reset_diplay()
@@ -262,12 +349,7 @@ def gameLoop():
         button("Reset",600,370,60,30,brightBlue,blue,resetGame)
 
         turnText()
-
-        if diceNum != 0:
-            diceText = pygame.font.SysFont("comicsansms",24)
-            textSurf, textRect = textObjects(str(diceNum), diceText, black)
-            textRect.center = ( (700), (325) )
-            screen.blit(textSurf, textRect)
+        diceText()
 
         if turn:
             player1Position = movePlayer(player1Position)
@@ -290,10 +372,10 @@ def gameLoop():
         pygame.draw.circle(screen, lawnGreen, player1Position, srad, 0)
         pygame.draw.circle(screen, marineBlue, player2Position, srad, 0)
 
-        if (player1Position[1] == 20)  & (player1Position[0] == 30) | (player1Position[1] < 20):
+        if (player1Position[1] == 20) and (player1Position[0] == 30) or (player1Position[1] < 20):
             win(player1Text, lawnGreen)
 
-        if (player2Position[1] == 20)  & (player2Position[0] == 30) | (player2Position[1] < 20):
+        if (player2Position[1] == 20)  and (player2Position[0] == 30) or (player2Position[1] < 20):
             win(player2Text, marineBlue)
 
         move = False
@@ -310,6 +392,7 @@ def gameLoop():
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
+                    #if player press esc quitGame()
                     quitGame()
 
 if __name__ =="__main__":
